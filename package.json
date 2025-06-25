@@ -1,0 +1,48 @@
+{
+  "name": "kukiserver",
+  "version": "1.0.0",
+  "description": "kuki server with apollov4",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "https": "node generate-cert.js && node https.js"
+  },
+  "keywords": [
+    "apollo v4",
+    "express",
+    "sequelize",
+    "mssql"
+  ],
+  "author": "Roberto Ramirez",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "compression": "^1.8.0",
+    "cors": "^2.8.5",
+    "crc-32": "^1.2.2",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-basic-auth": "^1.2.1",
+    "express-validator": "^7.0.1",
+    "firebase-admin": "^12.1.0",
+    "fs": "^0.0.1-security",
+    "lodash": "^4.17.21",
+    "node-fetch": "^3.3.2",
+    "node-schedule": "^2.1.1",
+    "nodemailer": "^6.9.3",
+    "path": "^0.12.7",
+    "sequelize": "^6.32.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
+    "tedious": "^16.1.0",
+    "twilio": "^4.14.0",
+    "validator": "^13.9.0",
+    "ws": "^8.14.2",
+    "xml2js": "^0.6.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.43.0",
+    "nodemon": "^3.0.1"
+  }
+}
