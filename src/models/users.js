@@ -50,6 +50,9 @@ module.exports = (sequelize) => {
         msg: 'email must be unique'
       }
     },
+    mobile: {
+      type: DataTypes.STRING(14)
+    },
     password: {
       type: DataTypes.INTEGER,
       allowNull: false

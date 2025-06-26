@@ -6,6 +6,8 @@ const {
   IsNulo,
   IsValidEmail,
   GetReqValues,
+  IsValidPhone,
+  FormatPhone,
 } = require('../../utils/utils');
 
 module.exports = () => {
@@ -83,11 +85,11 @@ module.exports = () => {
             .json(gg.returnDat(true, 400, 'Invalid email.', null));
         let nphone = '';
         //rey will do
-        // if (mobile != '') {
-        //   if (!(IsValidPhone(mobile)))
-        //     return res.status(200).json(gg.returnDat(true, 400, 'Invalid mobile number.', null));
-        //   nphone = FormatPhone(mobile);
-        // }        
+        if (mobile != '') {
+          if (!(IsValidPhone(mobile)))
+            return res.status(200).json(gg.returnDat(true, 400, 'Invalid mobile number.', null));
+          nphone = FormatPhone(mobile);
+        }        
         if (accessLevel < 1 || accessLevel > 5)
           return res
             .status(200)
