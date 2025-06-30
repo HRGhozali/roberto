@@ -86,6 +86,28 @@ async function startServer() {
     usersAdd
   );
 
+  // Protected Route JWT
+  // folder: users
+  const usersEdit = require('./src/api/users/edit')();
+  app.use(
+    '/api/users/edit',
+    cors(),
+    bodyParser.json(),
+    bodyParser.urlencoded({ extended: false }),
+    usersEdit
+  );
+
+  // Protected Route JWT
+  // folder: users
+  const usersDelete = require('./src/api/users/delete')();
+  app.use(
+    '/api/users/delete',
+    cors(),
+    bodyParser.json(),
+    bodyParser.urlencoded({ extended: false }),
+    usersDelete
+  );
+
   //
   // end  website
   //*********************** */
