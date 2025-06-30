@@ -217,14 +217,20 @@ function IsValidEmail(email) {
   return emailRegex.test(email);
 }
 
-function IsValidPhone(phone) {  // TODO: Implement phone regex
-  return (phone.length == 10);
+function IsValidPhone(phone) {  // If length = 10, its valid
+  return (phone.length === 10);
 }
 
 function FormatPhone(phone) {
   // Function comes after IsValidPhone; makes it so that anything that reaches this MUST be a valid phone # (w/ 10 valid digits)
   // Roberto says phone # is already stripped!
   return `(${phone.substring(0,3)}) ${phone.substring(3,6)}-${phone.substring(6)}` // Returns formatted string
+}
+
+function Get4Digit() {  // TODO LATER
+  // Get a random 4 digit code
+  // Assuming you want a value from 0000 to 9999
+  return Math.floor(Math.random() * 10000).padStart(4,0);
 }
 
 function GetReqValues(req) {
@@ -257,4 +263,5 @@ module.exports = {
   IsValidEmail,
   IsValidPhone,
   FormatPhone,
+  Get4Digit,
 };

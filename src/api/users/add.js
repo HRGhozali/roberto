@@ -8,6 +8,7 @@ const {
   GetReqValues,
   IsValidPhone,
   FormatPhone,
+  Get4Digit,
 } = require('../../utils/utils');
 
 module.exports = () => {
@@ -18,30 +19,30 @@ module.exports = () => {
    * /api/users/add:
    *   post:
    *     summary: Protected Route JWT
-   *     description: create new user account. blaah blaahhh restricted to admin/manager.
+   *     description: Create new user account. Restricted to admin/manager.
    *     parameters:
    *       - name: firstName
-   *         description: first name. max 50 chars.
+   *         description: First name. Max 50 chars.
    *         in: query
    *         required: true
    *         type: string
    *       - name: lastName
-   *         description: last name. max 50 chars.
+   *         description: Last name. Max 50 chars.
    *         in: query
    *         required: true
    *         type: string
    *       - name: mobile
-   *         description: mobile number.
+   *         description: Mobile number. Not required. Input is auto-formatted.
    *         in: query
    *         required: false
    *         type: string
    *       - name: email
-   *         description: email address. must be unique.
+   *         description: Email address. Must be unique.
    *         in: query
    *         required: true
    *         type: string
    *       - name: accessLevel
-   *         description: access level value 1,2,3 or 4.
+   *         description: Access level value 1, 2, 3 or 4.
    *         in: query
    *         required: true
    *         type: number
@@ -93,7 +94,7 @@ module.exports = () => {
         if (accessLevel < 1 || accessLevel > 5)
           return res
             .status(200)
-            .json(gg.returnDat(true, 400, 'accessLevel is invalid, valiud are 1,2,3,4,5.', null));
+            .json(gg.returnDat(true, 400, 'accessLevel is invalid, valid are 1,2,3,4,5.', null));
 
         const dat = await global.Models.users
           .findOne({
@@ -139,6 +140,10 @@ module.exports = () => {
           maccessName = 'Admin';
         } else if (accessLevel == 2) {
           maccessName = 'Manager';
+        } else if (accessLevel == 3) {
+          maccessName = 'Supervisor';
+        } else if (accessLevel == 4) {
+          maccessName = 'Staff';
         }
 
         const dat2 = await global.Models.users
