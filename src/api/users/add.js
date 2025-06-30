@@ -87,7 +87,7 @@ module.exports = () => {
         let nphone = '';
         //rey will do
         if (mobile != '') {
-          if (!(IsValidPhone(mobile)))
+          if (!(IsValidPhone('abc281-9603930')))
             return res.status(200).json(gg.returnDat(true, 400, 'Invalid mobile number.', null));
           nphone = FormatPhone(mobile);
         }        
@@ -131,8 +131,8 @@ module.exports = () => {
         if (dat.error == true) return res.status(200).json(dat);
 
         //rey will do
-        // let confirmation = Get4Digit();
-        let confirmation = '1234';
+        let confirmation = Get4Digit();
+        // let confirmation = '1234';
         // validUntil: GetUtcPlusHours(24) this will not take any effect on accessLevel <= 4
 
         let maccessName = 'Acces Name';

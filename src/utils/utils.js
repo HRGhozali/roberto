@@ -217,20 +217,54 @@ function IsValidEmail(email) {
   return emailRegex.test(email);
 }
 
-function IsValidPhone(phone) {  // If length = 10, its valid
-  return (phone.length === 10);
+// function IsValidPhone(phone) {  // If length = 10, its valid
+//   return (phone.length === 10);
+// }
+
+function IsValidPhone(phoneNumber) {
+  try {
+    var mtel = ExtractNumbers(phoneNumber);
+    var regex = /^\d{10}$/;
+    return regex.test(mtel);
+  } catch (e) {
+    return false;
+  }
 }
 
-function FormatPhone(phone) {
-  // Function comes after IsValidPhone; makes it so that anything that reaches this MUST be a valid phone # (w/ 10 valid digits)
-  // Roberto says phone # is already stripped!
-  return `(${phone.substring(0,3)}) ${phone.substring(3,6)}-${phone.substring(6)}` // Returns formatted string
+
+// function FormatPhone(phone) {
+//   // Function comes after IsValidPhone; makes it so that anything that reaches this MUST be a valid phone # (w/ 10 valid digits)
+//   // Roberto says phone # is already stripped!
+//   return `(${phone.substring(0,3)}) ${phone.substring(3,6)}-${phone.substring(6)}` // Returns formatted string
+// }
+
+function FormatPhone(phoneNumber) {
+  var mDigits = ExtractNumbers(phoneNumber);
+  try {
+    if (mDigits.length == 10)
+      return `(${mDigits.slice(0, 3)}) ${mDigits.slice(3, 6)}-${mDigits.slice(6)}`;
+    else
+      return mDigits;
+  } catch (e) {
+    return '(000) 000-0000';
+  }
 }
 
-function Get4Digit() {  // TODO LATER
-  // Get a random 4 digit code
-  // Assuming you want a value from 0000 to 9999
-  return Math.floor(Math.random() * 10000).padStart(4,0);
+// function Get4Digit() {  // TODO LATER
+//   // Get a random 4 digit code
+//   // Assuming you want a value from 0000 to 9999
+//   return Math.floor(Math.random() * 10000).padStart(4,0);
+// }
+
+
+function Get4Digit() {
+  // Generate a random number between 1000 and 9999
+  const min = 1000;
+  const max = 9999;
+  const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+  // Ensure the code is a 4-digit number (pad with leading zeros if necessary)
+  const fourDigitCode = randomNumber.toString().padStart(4, '0');
+  return fourDigitCode;
 }
 
 function GetReqValues(req) {
