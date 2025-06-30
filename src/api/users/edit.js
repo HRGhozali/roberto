@@ -93,7 +93,7 @@ module.exports = () => {
             return res
               .status(200)
               .json(gg.returnDat(true, 400, 'accessLevel is invalid, valid are 1,2,3,4,5.', null));
-  
+          let updated = new Date();
           const dat = await global.Models.users
             .findOne({
               where: {
@@ -109,6 +109,7 @@ module.exports = () => {
                   message: 'User found for that email.',
                   data: null,
                 };
+                updated = data.dataValues.updateDate;
               } else {
                 json = {
                   error: true,
@@ -140,20 +141,33 @@ module.exports = () => {
           }
   
           const dat2 = await global.Models.users
-            .findOne({
-              where: {
-                email: email,
-              },
-            })
-            .then(function (data) {
-              data.set({
+            .update(
+              {
                 accessLevel: accessLevel,
                 accessName: maccessName,
                 firstName: firstName,
                 lastName: lastName,
                 mobile: nphone,
-              });
-              data.save();
+                updateDate: new Date(),
+              },
+              {
+                where: {
+                    email: email,
+                    updateDate: updated
+                },
+              }
+            )
+            .then(([affectedRows]) => {
+                if (affectedRows === 0) {
+                    return {
+                        error: true,
+                        code: 409,
+                        message: "User was updated or deleted by another user. Please refresh the page.",
+                    }
+                }
+                return global.Models.users.findOne({where: {email: email}})
+            })
+            .then(function (data) {
               let infoDat = {
                 id: data.dataValues.id,
                 session: data.dataValues.nSession,

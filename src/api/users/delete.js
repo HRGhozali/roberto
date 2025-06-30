@@ -53,6 +53,7 @@ module.exports = () => {
               .status(200)
               .json(gg.returnDat(true, 400, 'Invalid email.', null));
           
+          let updated;
           const dat = await global.Models.users
             .findOne({
               where: {
@@ -68,6 +69,7 @@ module.exports = () => {
                   message: 'User found for that email.',
                   data: null,
                 };
+                updated = data.dataValues.updateDate;
               } else {
                 json = {
                   error: true,
@@ -93,12 +95,27 @@ module.exports = () => {
           // validUntil: GetUtcPlusHours(24) this will not take any effect on accessLevel <= 4
   
           const dat2 = await global.Models.users
-            .destroy({
+            .findOne({
               where: {
                 email: email,
+                updateDate: updated
               },
             })
-            .then(function (data) {
+            .then(function(data) {
+                if (!data) {  // If no data, then the user was updated/deleted between the first and second checks. Best I could think of.
+                    return {
+                        error: true,
+                        code: 409,
+                        message: "User was updated or deleted by another user. Please refresh the page."
+                    }
+                }
+                return global.Models.users.destroy({
+                    where: {
+                        email: email
+                    }
+                })
+            })
+            .then(function() {
               return {
                 error: false,
                 code: 200,
