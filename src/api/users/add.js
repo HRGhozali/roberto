@@ -55,7 +55,7 @@ module.exports = () => {
    *       401:
    *         description: Token invalid or expired.
    */
-
+  
   mRouters
     .route('/')
     .post(
