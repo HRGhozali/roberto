@@ -15,6 +15,13 @@ module.exports = (sequelize) => {
       allowNull: false,
       unique: true // Ensure uniqueness
     },
+    nSession: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: Sequelize.literal('FLOOR(1 + RAND() * 100)')
+      // Optimistic Locking Concurrency: 
+      // nSession number to ensure that the data has not been modified by another transaction between when it was read and when it is written.
+    },
     createDate: {
       type: DataTypes.DATE,
       allowNull: false,

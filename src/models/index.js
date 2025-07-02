@@ -74,7 +74,7 @@ async function syncTables(xforce) {
       console.log('*sync tables');
       // if (xforce) {      
       //   console.log('*seed tables');
-      //   db['users'].create({ name: 'Roberto Ramirez', email: 'rfletez@gmail.com', password: '123456' });      
+      // db['users'].create({ idUserCreate: 0, idUserUpdate: 0, name: 'Rey Gonzxali', firstName:'Rey', lastName: 'Gonzali', email: 'rey@gmail.com', password: '123456', accessLevel: 1, accessName: 'Admin', mobile: '(123) 123-1234' });      
       // }
     })
     .catch((error) => {

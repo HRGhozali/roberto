@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { check, validationResult } = require('express-validator');
-// const { Sequelize } = require('sequelize');
+const { Sequelize } = require('sequelize');
 const {
   ExtractNumbers,
   IsNulo,
@@ -20,11 +20,16 @@ module.exports = () => {
    *     summary: Protected Route JWT
    *     description: Edit user account. Checks if account exists via email. Edits others using given values. Restricted to admin/manager.
    *     parameters:
-   *       - name: email
-   *         description: Email address. Must be unique. Used to find account.
+   *       - name: id
+   *         description: id assigned.
    *         in: query
    *         required: true
    *         type: string
+   *       - name: session
+   *         description: session value.
+   *         in: query
+   *         required: true
+   *         type: number
    *       - name: firstName
    *         description: First name. Max 50 chars.
    *         in: query
@@ -56,150 +61,126 @@ module.exports = () => {
    */
 
   mRouters
-      .route('/')
-      .post(
-        [
-          check('email').isEmail(),
-          check('firstName').not().isEmpty(),
-          check('lastName').not().isEmpty(),
-          check('mobile'),
-          check('accessLevel').isNumeric(),
-        ],
-        async (req, res) => {
-          const errors = validationResult(req);
-          let gg = require('../../utils/myglobal');
-          if (!errors.isEmpty())
+    .route('/')
+    .post(
+      [
+        check('id').not().isEmpty(),
+        check('session').isNumeric(),
+        check('firstName').not().isEmpty(),
+        check('lastName').not().isEmpty(),
+        check('mobile'),
+        check('accessLevel').isNumeric(),
+      ],
+      async (req, res) => {
+        const errors = validationResult(req);
+        let gg = require('../../utils/myglobal');
+        if (!errors.isEmpty())
+          return res
+            .status(200)
+            .json(
+              gg.returnDat(true, 400, 'API required values.', errors.array())
+            );
+        const mDat = GetReqValues(req);
+        let { id, session, firstName, lastName, mobile, accessLevel } = mDat;
+        if (IsNulo(mobile)) mobile = '';
+        mobile = ExtractNumbers(mobile);
+        let nphone = '';
+        //rey will do
+        if (mobile != '') {
+          if (!IsValidPhone(mobile))
             return res
               .status(200)
-              .json(
-                gg.returnDat(true, 400, 'API required values.', errors.array())
-              );
-          const mDat = GetReqValues(req);
-          let { email, firstName, lastName, mobile, accessLevel } = mDat;
-          if (IsNulo(mobile)) mobile = '';
-          mobile = ExtractNumbers(mobile);
-          email = email.toLowerCase();
-          if (!IsValidEmail(email))
-            return res
-              .status(200)
-              .json(gg.returnDat(true, 400, 'Invalid email.', null));
-          let nphone = '';
-          //rey will do
-          if (mobile != '') {
-            if (!(IsValidPhone(mobile)))
-              return res.status(200).json(gg.returnDat(true, 400, 'Invalid mobile number.', null));
-            nphone = FormatPhone(mobile);
-          }        
-          if (accessLevel < 1 || accessLevel > 5)
-            return res
-              .status(200)
-              .json(gg.returnDat(true, 400, 'accessLevel is invalid, valid are 1,2,3,4,5.', null));
-          let updated = new Date();
-          const dat = await global.Models.users
-            .findOne({
-              where: {
-                email: email,
-              },
-            })
-            .then(function (data) {
-              let json = {};
-              if (data && data !== null) {
-                json = {
-                  error: false,
-                  code: 200,
-                  message: 'User found for that email.',
-                  data: null,
-                };
-                updated = data.dataValues.updateDate;
-              } else {
-                json = {
-                  error: true,
-                  code: 400,
-                  message: 'User not found.',
-                  data: null,
-                }; //or mobile
-              }
-              return json;
-            })
-            .catch((error) => {
-              let errmsg = error.message
-                ? error.message
-                : 'Invalid request or deceptive request routing.';
-              return { error: true, code: 400, message: errmsg, data: null };
-            });
-  
-          if (dat.error == true) return res.status(200).json(dat);
-  
-          let maccessName = 'Acces Name';
-          if (accessLevel == 1) {
-            maccessName = 'Admin';
-          } else if (accessLevel == 2) {
-            maccessName = 'Manager';
-          } else if (accessLevel == 3) {
-            maccessName = 'Supervisor';
-          } else if (accessLevel == 4) {
-            maccessName = 'Staff';
-          }
-  
-          const dat2 = await global.Models.users
-            .update(
-              {
-                accessLevel: accessLevel,
-                accessName: maccessName,
+              .json(gg.returnDat(true, 400, 'Invalid mobile number.', null));
+          nphone = FormatPhone(mobile);
+        }
+        if (accessLevel < 1 || accessLevel > 5)
+          return res
+            .status(200)
+            .json(
+              gg.returnDat(
+                true,
+                400,
+                'accessLevel is invalid, valid are 1,2,3,4,5.',
+                null
+              )
+            );
+
+        const dat = await global.Models.users
+          .findOne({ where: { id: id, nSession: session } })
+          .then(async function (data) {
+            let json = {};
+            if (data == null || !data) {
+              json = {
+                error: true,
+                code: 400,
+                message: 'Invalid data/session.',
+                data: null,
+              };
+            } else if (          data.dataValues.active == 0        ) {
+              //this is your token and to prevent by accident updating yoursekf with a lower level
+              json = {
+                error: true,
+                code: 400,
+                message:
+                  'Your access level cannot be lower than your assigned access.',
+                data: null,
+              };
+            } else {
+              const randomValue =
+                Math.floor(Math.random() * 100) + data.dataValues.nSession;
+              const updatedValues = {
+                idUserUpdate: 0,
+                updateDate: Sequelize.Sequelize.fn('getutcdate'),
                 firstName: firstName,
                 lastName: lastName,
                 mobile: nphone,
-                updateDate: new Date.UTC(),
-              },
-              {
-                where: {
-                    email: email,
-                    updateDate: updated
-                },
-              }
-            )
-            .then(([affectedRows]) => {
-                if (affectedRows === 0) {
-                    return {
-                        error: true,
-                        code: 409,
-                        message: "User was updated or deleted by another user. Please refresh the page.",
-                    }
-                }
-                return global.Models.users.findOne({where: {email: email}})
-            })
-            .then(function (data) {
-              let infoDat = {
-                id: data.dataValues.id,
-                session: data.dataValues.nSession,
-                fullName: data.dataValues.firstName + ' ' + data.dataValues.lastName,
-                firstName: data.dataValues.firstName,
-                lastName: data.dataValues.lastName,
-                accessLevel: data.dataValues.accessLevel,
-                role: data.dataValues.accessName,
-                mobile: data.dataValues.mobile,
-                email: data.dataValues.email,
-                active: data.dataValues.active,
-              }
-              return {
-                error: false,
-                code: 200,
-                message: 'Successful.',
-                data: infoDat,
+                accessLevel: accessLevel,
+                accessName: GetLevel(accessLevel),
+                nSession: randomValue,
               };
-            })
-            .catch((error) => {
-              console.log('error: ', error);
-              let errmsg = error.message
-                ? error.message
-                : 'Invalid request or deceptive request routing.';
-              return { error: true, code: 400, message: errmsg, data: null };
-            });
-  
-          if (dat2.error == true) return res.status(200).json(dat2);
-          else return res.status(200).json(dat2);
-        }
-      );
-  
-    return mRouters;
-  };
+              try {
+                await data.update(updatedValues);
+
+                let infoDat = {
+                  id: data.dataValues.id,
+                  session: data.dataValues.nSession,
+                  fullName:
+                    data.dataValues.firstName + ' ' + data.dataValues.lastName,
+                  firstName: data.dataValues.firstName,
+                  lastName: data.dataValues.lastName,
+                  accessLevel: data.dataValues.accessLevel,
+                  role: data.dataValues.accessName,
+                  mobile: data.dataValues.mobile,
+                  email: data.dataValues.email,
+                  active: data.dataValues.active,
+                };
+
+                json = {
+                  error: false,
+                  code: 200,
+                  message: 'Successful.',
+                  data: infoDat,
+                };
+              } catch (updateError) {
+                let errmsg = updateError.message
+                  ? updateError.message
+                  : 'Error during update.';
+                json = { error: true, code: 400, message: errmsg, data: null };
+              }
+            }
+            return json;
+          })
+          .catch((error) => {
+            let errmsg = error.message
+              ? error.message
+              : 'Invalid request or deceptive request routing.';
+            return { error: true, code: 400, message: errmsg, data: null };
+          });
+
+        if (dat.error == true) return res.status(200).json(dat);
+        else return res.status(200).json(dat);
+      }
+    );
+
+  return mRouters;
+};
