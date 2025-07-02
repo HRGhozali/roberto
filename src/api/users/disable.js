@@ -2,13 +2,8 @@ const { Router } = require('express');
 const { check, validationResult } = require('express-validator');
 const { Sequelize } = require('sequelize');
 const {
-  ExtractNumbers,
-  IsNulo,
   IsValidEmail,
   GetReqValues,
-  IsValidPhone,
-  FormatPhone,
-  GetLevel,
 } = require('../../utils/utils');
 
 module.exports = () => {
@@ -16,10 +11,10 @@ module.exports = () => {
 
   /**
    * @swagger
-   * /api/users/edit:
+   * /api/users/disable:
    *   post:
    *     summary: Protected Route JWT
-   *     description: Edit user account. Checks if account exists via email. Edits others using given values. Restricted to admin/manager.
+   *     description: Disable account. Checks if account exists via id. Restricted to admin/manager.
    *     parameters:
    *       - name: id
    *         description: id assigned.
@@ -28,26 +23,6 @@ module.exports = () => {
    *         type: string
    *       - name: session
    *         description: session value.
-   *         in: query
-   *         required: true
-   *         type: number
-   *       - name: firstName
-   *         description: First name. Max 50 chars.
-   *         in: query
-   *         required: true
-   *         type: string
-   *       - name: lastName
-   *         description: Last name. Max 50 chars.
-   *         in: query
-   *         required: true
-   *         type: string
-   *       - name: mobile
-   *         description: Mobile number. Not required. Input is auto-formatted.
-   *         in: query
-   *         required: false
-   *         type: string
-   *       - name: accessLevel
-   *         description: Access level value 1, 2, 3 or 4.
    *         in: query
    *         required: true
    *         type: number
@@ -67,10 +42,6 @@ module.exports = () => {
       [
         check('id').not().isEmpty(),
         check('session').isNumeric(),
-        check('firstName').not().isEmpty(),
-        check('lastName').not().isEmpty(),
-        check('mobile'),
-        check('accessLevel').isNumeric(),
       ],
       async (req, res) => {
         const errors = validationResult(req);
@@ -82,30 +53,8 @@ module.exports = () => {
               gg.returnDat(true, 400, 'API required values.', errors.array())
             );
         const mDat = GetReqValues(req);
-        let { id, session, firstName, lastName, mobile, accessLevel } = mDat;
-        if (IsNulo(mobile)) mobile = '';
-        mobile = ExtractNumbers(mobile);
-        let nphone = '';
-        //rey will do
-        if (mobile != '') {
-          if (!IsValidPhone(mobile))
-            return res
-              .status(200)
-              .json(gg.returnDat(true, 400, 'Invalid mobile number.', null));
-          nphone = FormatPhone(mobile);
-        }
-        if (accessLevel < 1 || accessLevel > 5)
-          return res
-            .status(200)
-            .json(
-              gg.returnDat(
-                true,
-                400,
-                'accessLevel is invalid, valid are 1,2,3,4,5.',
-                null
-              )
-            );
-
+        let { id, session } = mDat;
+        
         const dat = await global.Models.users
           .findOne({ where: { id: id, nSession: session } })
           .then(async function (data) {
@@ -123,7 +72,7 @@ module.exports = () => {
                 error: true,
                 code: 400,
                 message:
-                  'You cannot edit an inactive user.',
+                  'You cannot deactivate an inactive account.',
                 data: null,
               };
             } else {
@@ -132,11 +81,7 @@ module.exports = () => {
               const updatedValues = {
                 idUserUpdate: 0,
                 updateDate: Sequelize.Sequelize.fn('getutcdate'),
-                firstName: firstName,
-                lastName: lastName,
-                mobile: nphone,
-                accessLevel: accessLevel,
-                accessName: GetLevel(accessLevel),
+                active: 0,
                 nSession: randomValue,
               };
               try {

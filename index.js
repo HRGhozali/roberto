@@ -108,6 +108,39 @@ async function startServer() {
     usersDelete
   );
 
+   // Protected Route JWT
+  // folder: users
+  const usersEditEmail = require('./src/api/users/editEmail')();
+  app.use(
+    '/api/users/editEmail',
+    cors(),
+    bodyParser.json(),
+    bodyParser.urlencoded({ extended: false }),
+    usersEditEmail
+  );
+
+   // Protected Route JWT
+  // folder: users
+  const usersDisable = require('./src/api/users/disable')();
+  app.use(
+    '/api/users/disable',
+    cors(),
+    bodyParser.json(),
+    bodyParser.urlencoded({ extended: false }),
+    usersDisable
+  );
+
+   // Protected Route JWT
+  // folder: users
+  const usersEnable = require('./src/api/users/enable')();
+  app.use(
+    '/api/users/enable',
+    cors(),
+    bodyParser.json(),
+    bodyParser.urlencoded({ extended: false }),
+    usersEnable
+  );
+
   //
   // end  website
   //*********************** */

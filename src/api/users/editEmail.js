@@ -1,15 +1,9 @@
 const { Router } = require('express');
 const { check, validationResult } = require('express-validator');
-// const { Sequelize } = require('sequelize');
+const { Sequelize } = require('sequelize');
 const {
-  ExtractNumbers,
-  IsNulo,
   IsValidEmail,
   GetReqValues,
-  IsValidPhone,
-  FormatPhone,
-  Get4Digit,
-  GetLevel,
 } = require('../../utils/utils');
 
 module.exports = () => {
@@ -17,36 +11,26 @@ module.exports = () => {
 
   /**
    * @swagger
-   * /api/users/add:
+   * /api/users/editEmail:
    *   post:
    *     summary: Protected Route JWT
-   *     description: Create new user account. Restricted to admin/manager.
+   *     description: Edit user email. Checks if account exists via id. Edits email using given values. Restricted to admin/manager.
    *     parameters:
-   *       - name: firstName
-   *         description: First name. Max 50 chars.
+   *       - name: id
+   *         description: id assigned.
    *         in: query
    *         required: true
    *         type: string
-   *       - name: lastName
-   *         description: Last name. Max 50 chars.
+   *       - name: session
+   *         description: session value.
    *         in: query
    *         required: true
-   *         type: string
-   *       - name: mobile
-   *         description: Mobile number. Not required. Input is auto-formatted.
-   *         in: query
-   *         required: false
-   *         type: string
+   *         type: number
    *       - name: email
    *         description: Email address. Must be unique.
    *         in: query
    *         required: true
    *         type: string
-   *       - name: accessLevel
-   *         description: Access level value 1, 2, 3 or 4.
-   *         in: query
-   *         required: true
-   *         type: number
    *
    *     responses:
    *       200:
@@ -56,16 +40,14 @@ module.exports = () => {
    *       401:
    *         description: Token invalid or expired.
    */
-  
+
   mRouters
     .route('/')
     .post(
       [
-        check('firstName').not().isEmpty(),
-        check('lastName').not().isEmpty(),
-        check('mobile'),
+        check('id').not().isEmpty(),
+        check('session').isNumeric(),
         check('email').isEmail(),
-        check('accessLevel').isNumeric(),
       ],
       async (req, res) => {
         const errors = validationResult(req);
@@ -77,26 +59,13 @@ module.exports = () => {
               gg.returnDat(true, 400, 'API required values.', errors.array())
             );
         const mDat = GetReqValues(req);
-        let { firstName, lastName, mobile, email, accessLevel } = mDat;
-        if (IsNulo(mobile)) mobile = '';
-        mobile = ExtractNumbers(mobile);
+        let { id, session, email } = mDat;
         email = email.toLowerCase();
         if (!IsValidEmail(email))
           return res
             .status(200)
             .json(gg.returnDat(true, 400, 'Invalid email.', null));
-        let nphone = '';
-        //rey will do
-        if (mobile != '') {
-          if (!(IsValidPhone('abc281-9603930')))
-            return res.status(200).json(gg.returnDat(true, 400, 'Invalid mobile number.', null));
-          nphone = FormatPhone(mobile);
-        }        
-        if (accessLevel < 1 || accessLevel > 5)
-          return res
-            .status(200)
-            .json(gg.returnDat(true, 400, 'accessLevel is invalid, valid are 1,2,3,4,5.', null));
-
+        
         const dat = await global.Models.users
           .findOne({
             where: {
@@ -131,47 +100,68 @@ module.exports = () => {
 
         if (dat.error == true) return res.status(200).json(dat);
 
-        //rey will do
-        let confirmation = Get4Digit();
-        // let confirmation = '1234';
-        // validUntil: GetUtcPlusHours(24) this will not take any effect on accessLevel <= 4
-
         const dat2 = await global.Models.users
-          .create({
-            apiVersion: global.apiVersion,
-            idUserCreate: 0,
-            accessLevel: accessLevel,
-            accessName: GetLevel(accessLevel),
-            firstName: firstName,
-            lastName: lastName,
-            mobile: nphone,
-            email: email,
-            password: 0,
-            forgotPassword: confirmation,
-            active: true,
-          })
-          .then(function (data) {
-            let infoDat = {
-              id: data.dataValues.id,
-              session: data.dataValues.nSession,
-              fullName: data.dataValues.firstName + ' ' + data.dataValues.lastName,
-              firstName: data.dataValues.firstName,
-              lastName: data.dataValues.lastName,
-              accessLevel: data.dataValues.accessLevel,
-              role: data.dataValues.accessName,
-              mobile: data.dataValues.mobile,
-              email: data.dataValues.email,
-              active: data.dataValues.active,
-            };
-            return {
-              error: false,
-              code: 200,
-              message: 'Successful.',
-              data: infoDat,
-            };
+          .findOne({ where: { id: id, nSession: session } })
+          .then(async function (data) {
+            let json = {};
+            if (data == null || !data) {
+              json = {
+                error: true,
+                code: 400,
+                message: 'Invalid data/session.',
+                data: null,
+              };
+            } else if (          data.dataValues.active == 0        ) {
+              //this is your token and to prevent by accident updating yoursekf with a lower level
+              json = {
+                error: true,
+                code: 400,
+                message:
+                  'Your access level cannot be lower than your assigned access.',
+                data: null,
+              };
+            } else {
+              const randomValue =
+                Math.floor(Math.random() * 100) + data.dataValues.nSession;
+              const updatedValues = {
+                idUserUpdate: 0,
+                updateDate: Sequelize.Sequelize.fn('getutcdate'),
+                email: email,
+                nSession: randomValue,
+              };
+              try {
+                await data.update(updatedValues);
+
+                let infoDat = {
+                  id: data.dataValues.id,
+                  session: data.dataValues.nSession,
+                  fullName:
+                    data.dataValues.firstName + ' ' + data.dataValues.lastName,
+                  firstName: data.dataValues.firstName,
+                  lastName: data.dataValues.lastName,
+                  accessLevel: data.dataValues.accessLevel,
+                  role: data.dataValues.accessName,
+                  mobile: data.dataValues.mobile,
+                  email: data.dataValues.email,
+                  active: data.dataValues.active,
+                };
+
+                json = {
+                  error: false,
+                  code: 200,
+                  message: 'Successful.',
+                  data: infoDat,
+                };
+              } catch (updateError) {
+                let errmsg = updateError.message
+                  ? updateError.message
+                  : 'Error during update.';
+                json = { error: true, code: 400, message: errmsg, data: null };
+              }
+            }
+            return json;
           })
           .catch((error) => {
-            console.log('error: ', error);
             let errmsg = error.message
               ? error.message
               : 'Invalid request or deceptive request routing.';

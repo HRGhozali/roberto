@@ -274,6 +274,20 @@ function GetReqValues(req) {
     return req.body;
 }
 
+function GetLevel(accessLevel) {
+  let maccessName = 'Acces Name';
+  if (accessLevel == 1) {
+    maccessName = 'Admin';
+  } else if (accessLevel == 2) {
+    maccessName = 'Manager';
+  } else if (accessLevel == 3) {
+    maccessName = 'Supervisor';
+  } else if (accessLevel == 4) {
+    maccessName = 'Staff';
+  }
+  return maccessName;
+}
+
 module.exports = {  
   CleanText,  
   ValDate,
@@ -298,4 +312,5 @@ module.exports = {
   IsValidPhone,
   FormatPhone,
   Get4Digit,
+  GetLevel,
 };
