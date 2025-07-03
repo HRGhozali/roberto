@@ -61,7 +61,7 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING(14)  // (xxx) xxx-xxxx is 14 characters
     },
     password: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(255),
       allowNull: false
     },
     forgotPassword: {

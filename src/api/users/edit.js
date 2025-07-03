@@ -41,6 +41,11 @@ module.exports = () => {
    *         in: query
    *         required: true
    *         type: string
+   *       - name: password
+   *         description: Password. Max 255 chars.
+   *         in: query
+   *         required: true
+   *         type: string
    *       - name: mobile
    *         description: Mobile number. Not required. Input is auto-formatted.
    *         in: query
@@ -69,6 +74,7 @@ module.exports = () => {
         check('session').isNumeric(),
         check('firstName').not().isEmpty(),
         check('lastName').not().isEmpty(),
+        check('password').not().isEmpty(),
         check('mobile'),
         check('accessLevel').isNumeric(),
       ],
@@ -82,7 +88,7 @@ module.exports = () => {
               gg.returnDat(true, 400, 'API required values.', errors.array())
             );
         const mDat = GetReqValues(req);
-        let { id, session, firstName, lastName, mobile, accessLevel } = mDat;
+        let { id, session, firstName, lastName, password, mobile, accessLevel } = mDat;
         if (IsNulo(mobile)) mobile = '';
         mobile = ExtractNumbers(mobile);
         let nphone = '';
@@ -134,6 +140,7 @@ module.exports = () => {
                 updateDate: Sequelize.Sequelize.fn('getutcdate'),
                 firstName: firstName,
                 lastName: lastName,
+                password: password,
                 mobile: nphone,
                 accessLevel: accessLevel,
                 accessName: GetLevel(accessLevel),

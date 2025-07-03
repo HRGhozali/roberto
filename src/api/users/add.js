@@ -32,6 +32,11 @@ module.exports = () => {
    *         in: query
    *         required: true
    *         type: string
+   *       - name: password
+   *         description: Password. Max 255 chars. Required for login.
+   *         in: query
+   *         required: true
+   *         type: string
    *       - name: mobile
    *         description: Mobile number. Not required. Input is auto-formatted.
    *         in: query
@@ -63,6 +68,7 @@ module.exports = () => {
       [
         check('firstName').not().isEmpty(),
         check('lastName').not().isEmpty(),
+        check('password').not().isEmpty(),
         check('mobile'),
         check('email').isEmail(),
         check('accessLevel').isNumeric(),
@@ -77,7 +83,7 @@ module.exports = () => {
               gg.returnDat(true, 400, 'API required values.', errors.array())
             );
         const mDat = GetReqValues(req);
-        let { firstName, lastName, mobile, email, accessLevel } = mDat;
+        let { firstName, lastName, password, mobile, email, accessLevel } = mDat;
         if (IsNulo(mobile)) mobile = '';
         mobile = ExtractNumbers(mobile);
         email = email.toLowerCase();
@@ -144,6 +150,7 @@ module.exports = () => {
             accessName: GetLevel(accessLevel),
             firstName: firstName,
             lastName: lastName,
+            password: password,
             mobile: nphone,
             email: email,
             password: 0,
