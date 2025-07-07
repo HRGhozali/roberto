@@ -2,7 +2,6 @@ const { Router } = require('express');
 const { check, validationResult } = require('express-validator');
 // const { Sequelize } = require('sequelize');
 const {
-  IsValidEmail,
   GetReqValues,
 } = require('../../utils/utils');
 

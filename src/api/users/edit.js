@@ -4,7 +4,6 @@ const { Sequelize } = require('sequelize');
 const {
   ExtractNumbers,
   IsNulo,
-  IsValidEmail,
   GetReqValues,
   IsValidPhone,
   FormatPhone,

@@ -2,14 +2,8 @@ const { Router } = require('express');
 const { check, validationResult } = require('express-validator');
 // const { Sequelize } = require('sequelize');
 const {
-  ExtractNumbers,
-  IsNulo,
   IsValidEmail,
   GetReqValues,
-  IsValidPhone,
-  FormatPhone,
-  Get4Digit,
-  GetLevel,
 } = require('../../utils/utils');
 
 module.exports = () => {
