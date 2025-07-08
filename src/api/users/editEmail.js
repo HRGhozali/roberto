@@ -117,7 +117,7 @@ module.exports = () => {
                 error: true,
                 code: 400,
                 message:
-                  'Your access level cannot be lower than your assigned access.',
+                  'You cannot edit an inactive account.',
                 data: null,
               };
             } else {

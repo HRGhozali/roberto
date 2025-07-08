@@ -17,7 +17,7 @@ module.exports = () => {
    *     description: Get user's full name using email and ID.
    *     parameters:
    *       - name: id
-   *         description: id assigned.
+   *         description: Id assigned.
    *         in: query
    *         required: true
    *         type: string

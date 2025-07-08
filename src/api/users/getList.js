@@ -30,7 +30,7 @@ module.exports = () => {
     .post(
       async (req, res) => {
         const dat = await global.Models.users
-          .findAll({ attributes: ['id','email'], where: { active: 1 } })
+          .findAll({ attributes: ['id','email'], where: { active: 1 } })  // Assuming we only wanna be able to search active users.
           .then(async function (data) {
             let json = {};
             if (data == null || !data) {
