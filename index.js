@@ -108,7 +108,7 @@ async function startServer() {
     usersDelete
   );
 
-   // Protected Route JWT
+  // Protected Route JWT
   // folder: users
   const usersEditEmail = require('./src/api/users/editEmail')();
   app.use(
@@ -119,7 +119,7 @@ async function startServer() {
     usersEditEmail
   );
 
-   // Protected Route JWT
+  // Protected Route JWT
   // folder: users
   const usersDisable = require('./src/api/users/disable')();
   app.use(
@@ -130,7 +130,7 @@ async function startServer() {
     usersDisable
   );
 
-   // Protected Route JWT
+  // Protected Route JWT
   // folder: users
   const usersEnable = require('./src/api/users/enable')();
   app.use(
@@ -141,7 +141,7 @@ async function startServer() {
     usersEnable
   );
 
-   // Protected Route JWT
+  // Protected Route JWT
   // folder: users
   const usersGetList = require('./src/api/users/getList')();
   app.use(
@@ -152,7 +152,7 @@ async function startServer() {
     usersGetList
   );
 
-   // Protected Route JWT
+  // Protected Route JWT
   // folder: users
   const usersGetUser = require('./src/api/users/getUser')();
   app.use(
