@@ -141,6 +141,28 @@ async function startServer() {
     usersEnable
   );
 
+   // Protected Route JWT
+  // folder: users
+  const usersGetList = require('./src/api/users/getList')();
+  app.use(
+    '/api/users/getList',
+    cors(),
+    bodyParser.json(),
+    bodyParser.urlencoded({ extended: false }),
+    usersGetList
+  );
+
+   // Protected Route JWT
+  // folder: users
+  const usersGetUser = require('./src/api/users/getUser')();
+  app.use(
+    '/api/users/getUser',
+    cors(),
+    bodyParser.json(),
+    bodyParser.urlencoded({ extended: false }),
+    usersGetUser
+  );
+
   //
   // end  website
   //*********************** */

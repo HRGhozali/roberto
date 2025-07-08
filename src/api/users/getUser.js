@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { check, validationResult } = require('express-validator');
-// const { Sequelize } = require('sequelize');
+const { Sequelize } = require('sequelize');
 const {
   IsValidEmail,
   GetReqValues,
@@ -11,26 +11,21 @@ module.exports = () => {
 
   /**
    * @swagger
-   * /api/users/login:
+   * /api/users/getUser:
    *   post:
    *     summary: Protected Route JWT
-   *     description: Create new user account. Restricted to admin/manager.
+   *     description: Get user's full name using email and ID.
    *     parameters:
+   *       - name: id
+   *         description: id assigned.
+   *         in: query
+   *         required: true
+   *         type: string
    *       - name: email
    *         description: Email address. Must be unique.
    *         in: query
    *         required: true
    *         type: string
-   *       - name: password
-   *         description: Password. Max 255 chars. Required for login.
-   *         in: query
-   *         required: true
-   *         type: string
-   *       - name: session
-   *         description: session value.
-   *         in: query
-   *         required: true
-   *         type: number
    *
    *     responses:
    *       200:
@@ -40,14 +35,13 @@ module.exports = () => {
    *       401:
    *         description: Token invalid or expired.
    */
-  
+
   mRouters
     .route('/')
     .post(
       [
+        check('id').not().isEmpty(),
         check('email').isEmail(),
-        check('password').not().isEmpty(),
-        check('session').isNumeric(),
       ],
       async (req, res) => {
         const errors = validationResult(req);
@@ -59,56 +53,62 @@ module.exports = () => {
               gg.returnDat(true, 400, 'API required values.', errors.array())
             );
         const mDat = GetReqValues(req);
-        let { email, password, session } = mDat;
+        let { id, email } = mDat;
         email = email.toLowerCase();
         if (!IsValidEmail(email))
           return res
             .status(200)
             .json(gg.returnDat(true, 400, 'Invalid email.', null));
-
+        
         const dat = await global.Models.users
           .findOne({
             where: {
-                email: email,
-                password: password,
-                nSession: session
-            }
-          })
-          .then(function (data) {
+              id: id,
+              email: email,
+            },
+          }).then(async function (data) {
             let json = {};
-            if (!data || data == null) {
-                json = {
-                    error: true,
-                    code: 400,
-                    message: "Invalid data/session.",
-                    data: null
-                }
-            }
-            else {
+            if (data == null || !data) {
+              json = {
+                error: true,
+                code: 400,
+                message: 'Invalid data.',
+                data: null,
+              };
+            } else if (          data.dataValues.active == 0        ) {
+              //this is your token and to prevent by accident updating yoursekf with a lower level
+              json = {
+                error: true,
+                code: 400,
+                message:
+                  'You cannot search an inactive user.',
+                data: null,
+              };
+            } else {
+              try {
                 let infoDat = {
-                    id: data.dataValues.id,
-                    session: data.dataValues.nSession,
-                    fullName: data.dataValues.firstName + ' ' + data.dataValues.lastName,
-                    firstName: data.dataValues.firstName,
-                    lastName: data.dataValues.lastName,
-                    accessLevel: data.dataValues.accessLevel,
-                    role: data.dataValues.accessName,
-                    mobile: data.dataValues.mobile,
-                    email: data.dataValues.email,
-                    active: data.dataValues.active,
+                  id: data.dataValues.id,
+                  fullName:
+                    data.dataValues.firstName + ' ' + data.dataValues.lastName,
+                  email: data.dataValues.email,
                 };
+
                 json = {
-                    error: false,
-                    code: 200,
-                    message: 'Successful.',
-                    data: infoDat,
+                  error: false,
+                  code: 200,
+                  message: 'Successful.',
+                  data: infoDat,
                 };
-                // TODO: Insert further things to deal with login. Session token? Ask Roberto.
+              } catch (searchError) {
+                let errmsg = searchError.message
+                  ? searchError.message
+                  : 'Error during update.';
+                json = { error: true, code: 400, message: errmsg, data: null };
+              }
             }
             return json;
           })
           .catch((error) => {
-            console.log('error: ', error);
             let errmsg = error.message
               ? error.message
               : 'Invalid request or deceptive request routing.';
