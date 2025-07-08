@@ -153,7 +153,6 @@ module.exports = () => {
             password: password,
             mobile: nphone,
             email: email,
-            password: 0,
             forgotPassword: confirmation,
             active: true,
           })

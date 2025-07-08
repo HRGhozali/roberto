@@ -40,14 +40,13 @@ module.exports = () => {
    *       401:
    *         description: Token invalid or expired.
    */
-  
+
   mRouters
     .route('/')
     .post(
       [
         check('email').isEmail(),
         check('password').not().isEmpty(),
-        check('session').isNumeric(),
       ],
       async (req, res) => {
         const errors = validationResult(req);
@@ -69,41 +68,41 @@ module.exports = () => {
         const dat = await global.Models.users
           .findOne({
             where: {
-                email: email,
-                password: password,
-                nSession: session
+              email: email,
+              password: password,
+              nSession: session
             }
           })
           .then(function (data) {
             let json = {};
             if (!data || data == null) {
-                json = {
-                    error: true,
-                    code: 400,
-                    message: "Invalid data/session.",
-                    data: null
-                }
+              json = {
+                error: true,
+                code: 400,
+                message: 'Invalid data/session.',
+                data: null
+              };
             }
             else {
-                let infoDat = {
-                    id: data.dataValues.id,
-                    session: data.dataValues.nSession,
-                    fullName: data.dataValues.firstName + ' ' + data.dataValues.lastName,
-                    firstName: data.dataValues.firstName,
-                    lastName: data.dataValues.lastName,
-                    accessLevel: data.dataValues.accessLevel,
-                    role: data.dataValues.accessName,
-                    mobile: data.dataValues.mobile,
-                    email: data.dataValues.email,
-                    active: data.dataValues.active,
-                };
-                json = {
-                    error: false,
-                    code: 200,
-                    message: 'Successful.',
-                    data: infoDat,
-                };
-                // TODO: Insert further things to deal with login. Session token? Ask Roberto.
+              let infoDat = {
+                id: data.dataValues.id,
+                session: data.dataValues.nSession,
+                fullName: data.dataValues.firstName + ' ' + data.dataValues.lastName,
+                firstName: data.dataValues.firstName,
+                lastName: data.dataValues.lastName,
+                accessLevel: data.dataValues.accessLevel,
+                role: data.dataValues.accessName,
+                mobile: data.dataValues.mobile,
+                email: data.dataValues.email,
+                active: data.dataValues.active,
+              };
+              json = {
+                error: false,
+                code: 200,
+                message: 'Successful.',
+                data: infoDat,
+              };
+              // TODO: Insert further things to deal with login. Session token? Ask Roberto.
             }
             return json;
           })

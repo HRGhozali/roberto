@@ -1,6 +1,5 @@
 const { Router } = require('express');
 const { check, validationResult } = require('express-validator');
-const { Sequelize } = require('sequelize');
 const {
   IsValidEmail,
   GetReqValues,
@@ -59,7 +58,7 @@ module.exports = () => {
           return res
             .status(200)
             .json(gg.returnDat(true, 400, 'Invalid email.', null));
-        
+
         const dat = await global.Models.users
           .findOne({
             where: {
@@ -72,10 +71,10 @@ module.exports = () => {
               json = {
                 error: true,
                 code: 400,
-                message: 'Invalid data.',
+                message: 'Invalid data/session.',
                 data: null,
               };
-            } else if (          data.dataValues.active == 0        ) {
+            } else if (data.dataValues.active == 0) {
               //this is your token and to prevent by accident updating yoursekf with a lower level
               json = {
                 error: true,

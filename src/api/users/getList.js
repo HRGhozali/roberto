@@ -1,10 +1,4 @@
 const { Router } = require('express');
-const { check, validationResult } = require('express-validator');
-const { Sequelize } = require('sequelize');
-const {
-  IsValidEmail,
-  GetReqValues,
-} = require('../../utils/utils');
 
 module.exports = () => {
   const mRouters = Router();
@@ -40,16 +34,20 @@ module.exports = () => {
                 message: 'Invalid data/session.',
                 data: null,
               };
+            } else if (length(data) === 0) {
+              json = {
+                error: false,
+                code: 200,
+                message: 'No users to return.',
+                data: null,
+              };
             } else {
               try {
-                let infoDat = {
-                  users: data.map(data => data.dataValues),
-                }
                 json = {
                   error: false,
                   code: 200,
                   message: 'Successful.',
-                  data: infoDat,
+                  data: data,
                 };
               } catch (searchError) {
                 let errmsg = searchError.message
