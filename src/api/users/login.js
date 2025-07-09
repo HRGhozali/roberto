@@ -29,11 +29,6 @@ module.exports = () => {
    *         in: query
    *         required: true
    *         type: string
-   *       - name: session
-   *         description: session value.
-   *         in: query
-   *         required: true
-   *         type: number
    *
    *     responses:
    *       200:
@@ -61,7 +56,7 @@ module.exports = () => {
               gg.returnDat(true, 400, 'API required values.', errors.array())
             );
         const mDat = GetReqValues(req);
-        let { email, password, session } = mDat;
+        let { email, password } = mDat;
         email = email.toLowerCase();
         if (!IsValidEmail(email))
           return res
@@ -73,7 +68,6 @@ module.exports = () => {
             where: {
               email: email,
               password: password,
-              nSession: session
             }
           })
           .then(function (data) {
