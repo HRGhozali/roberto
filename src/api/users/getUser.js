@@ -4,6 +4,9 @@ const {
   IsValidEmail,
   GetReqValues,
 } = require('../../utils/utils');
+const {
+  authToken,
+} = require('../../utils/middleware');
 
 module.exports = () => {
   const mRouters = Router();
@@ -14,6 +17,8 @@ module.exports = () => {
    *   post:
    *     summary: Protected Route JWT
    *     description: Get user's full name using email and ID.
+   *     security:
+   *       - bearerAuth: []
    *     parameters:
    *       - name: id
    *         description: Id assigned.
@@ -39,6 +44,7 @@ module.exports = () => {
     .route('/')
     .post(
       [
+        authToken(),
         check('id').not().isEmpty(),
         check('email').isEmail(),
       ],

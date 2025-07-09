@@ -5,6 +5,9 @@ const {
   IsValidEmail,
   GetReqValues,
 } = require('../../utils/utils');
+const {
+  genToken,
+} = require('../../utils/middleware');
 
 module.exports = () => {
   const mRouters = Router();
@@ -84,24 +87,19 @@ module.exports = () => {
               };
             }
             else {
-              let infoDat = {
-                id: data.dataValues.id,
-                session: data.dataValues.nSession,
-                fullName: data.dataValues.firstName + ' ' + data.dataValues.lastName,
-                firstName: data.dataValues.firstName,
-                lastName: data.dataValues.lastName,
-                accessLevel: data.dataValues.accessLevel,
-                role: data.dataValues.accessName,
-                mobile: data.dataValues.mobile,
-                email: data.dataValues.email,
-                active: data.dataValues.active,
-              };
+              const token = genToken(data.dataValues.id, data.dataValues.email, data.dataValues.role);
               json = {
                 error: false,
                 code: 200,
                 message: 'Successful.',
-                data: infoDat,
+                data: token,
               };
+              res.cookie('auth-token', token, {
+                httpOnly: true,
+                secure: process.env.NODE_END === 'production',
+                sameSite: 'Strict',
+                maxAge: 60 * 60 * 1000,
+              });
               // TODO: Insert further things to deal with login. Session token? Ask Roberto.
             }
             return json;

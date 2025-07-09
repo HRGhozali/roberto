@@ -4,6 +4,9 @@ const { Sequelize } = require('sequelize');
 const {
   GetReqValues,
 } = require('../../utils/utils');
+const {
+  authToken,
+} = require('../../utils/middleware');
 
 module.exports = () => {
   const mRouters = Router();
@@ -14,6 +17,8 @@ module.exports = () => {
    *   post:
    *     summary: Protected Route JWT
    *     description: Disable account. Checks if account exists via id. Restricted to admin/manager.
+   *     security:
+   *       - bearerAuth: []
    *     parameters:
    *       - name: id
    *         description: id assigned.
@@ -39,6 +44,7 @@ module.exports = () => {
     .route('/')
     .post(
       [
+        authToken(),
         check('id').not().isEmpty(),
         check('session').isNumeric(),
       ],

@@ -15,6 +15,7 @@ const http = require('http');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const compression = require('compression');
+const cookieParser = require('cookie-parser');
 
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
@@ -30,6 +31,7 @@ const validUsers = {
   rey: 'Abc123456',
   user2: '654321',
 };
+
 // Middleware for basic authentication
 // eslint-disable-next-line no-unused-vars
 const authMiddleware = basicAuth({
@@ -46,12 +48,16 @@ async function startServer() {
 
   // Enable compression
   app.use(compression());
+  
+  // enable Cookie parser
+  app.use(cookieParser());
 
   // ** websocket does not work properly with graphql as of 08/01/2024 on the same port
 
   //swagger documentations **********************************************************
   const swaggerOptions = {
     swaggerDefinition: {
+      openapi: '3.0.0',
       info: {
         title: 'Rey API',
         description:
@@ -66,6 +72,20 @@ async function startServer() {
           url: 'http://www.apache.org/licenses/LICENSE-2.0.html',
         },
       },
+      components: {
+        securitySchemes: {
+          bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT'
+          },
+        },
+      },
+      security: [
+        {
+          bearerAuth: [],
+        },
+      ],
     },
     apis: ['./src/api/**/*.js'],
   };

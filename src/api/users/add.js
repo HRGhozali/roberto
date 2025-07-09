@@ -11,6 +11,9 @@ const {
   Get4Digit,
   GetLevel,
 } = require('../../utils/utils');
+const {
+  authToken,
+} = require('../../utils/middleware');
 
 module.exports = () => {
   const mRouters = Router();
@@ -21,6 +24,8 @@ module.exports = () => {
    *   post:
    *     summary: Protected Route JWT
    *     description: Create new user account. Restricted to admin/manager.
+   *     security:
+   *       - bearerAuth: []
    *     parameters:
    *       - name: firstName
    *         description: First name. Max 50 chars.
@@ -66,6 +71,7 @@ module.exports = () => {
     .route('/')
     .post(
       [
+        authToken(),
         check('firstName').not().isEmpty(),
         check('lastName').not().isEmpty(),
         check('password').not().isEmpty(),

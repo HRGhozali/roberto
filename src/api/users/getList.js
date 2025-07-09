@@ -1,4 +1,7 @@
 const { Router } = require('express');
+const {
+  authToken,
+} = require('../../utils/middleware');
 
 module.exports = () => {
   const mRouters = Router();
@@ -9,6 +12,8 @@ module.exports = () => {
    *   post:
    *     summary: Protected Route JWT
    *     description: Get list of all user IDs and emails.
+   *     security:
+   *       - bearerAuth: []
    *
    *     responses:
    *       200:
@@ -22,6 +27,9 @@ module.exports = () => {
   mRouters
     .route('/')
     .post(
+      [
+        authToken(),
+      ],
       async (req, res) => {
         const dat = await global.Models.users
           .findAll({ attributes: ['id','email'], where: { active: 1 } })  // Assuming we only wanna be able to search active users.
