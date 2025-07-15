@@ -174,6 +174,17 @@ async function startServer() {
     login
   );
 
+  // Protected Route JWT
+  // folder: users
+  const test = require('./src/api/users/test')();
+  app.use(
+    '/api/users/test',
+    cors(),
+    bodyParser.json(),
+    bodyParser.urlencoded({ extended: false }),
+    test
+  );
+
   //
   // end  website
   //*********************** */

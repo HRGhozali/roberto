@@ -81,27 +81,38 @@ module.exports = () => {
               };
             }
             else {
-              const token = genToken(data.dataValues.id, data.dataValues.email, data.dataValues.role);
-              console.log('token',token);
-              let infoDat = {
-                id: data.dataValues.id,
-                session: data.dataValues.nSession,
-                fullName: data.dataValues.firstName + ' ' + data.dataValues.lastName,
-                firstName: data.dataValues.firstName,
-                lastName: data.dataValues.lastName,
-                accessLevel: data.dataValues.accessLevel,
-                role: data.dataValues.accessName,
-                mobile: data.dataValues.mobile,
-                email: data.dataValues.email,
-                active: data.dataValues.active,
-              };
-              json = {
-                error: false,
-                code: 200,
-                message: 'Successful.',
-                data: infoDat,
-              };
+              if (data.dataValues.active != 1) {
+                json = {
+                  error: true,
+                  code: 400,
+                  message: 'Cannot log into an inactive account.',
+                  data: null
+                };
+              }
+              else {
+                const token = genToken(data.dataValues.id, data.dataValues.email, data.dataValues.role);
+                console.log('token',token);
+                let infoDat = {
+                  token: token,
+                  id: data.dataValues.id,
+                  session: data.dataValues.nSession,
+                  fullName: data.dataValues.firstName + ' ' + data.dataValues.lastName,
+                  firstName: data.dataValues.firstName,
+                  lastName: data.dataValues.lastName,
+                  accessLevel: data.dataValues.accessLevel,
+                  role: data.dataValues.accessName,
+                  mobile: data.dataValues.mobile,
+                  email: data.dataValues.email,
+                  active: data.dataValues.active,
+                };
+                json = {
+                  error: false,
+                  code: 200,
+                  message: 'Successful.',
+                  data: infoDat,
+                };
               // TODO: Insert further things to deal with login. Session token? Ask Roberto.
+              }
             }
             return json;
           })
