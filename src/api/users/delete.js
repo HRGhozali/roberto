@@ -4,6 +4,9 @@ const { check, validationResult } = require('express-validator');
 const {
   GetReqValues,
 } = require('../../utils/utils');
+// const {
+//   authToken,
+// } = require('../../utils/middleware');
 
 module.exports = () => {
   const mRouters = Router();
@@ -38,6 +41,7 @@ module.exports = () => {
     .route('/')
     .post(
       [
+        //authToken(),
         check('id').not().isEmpty(),
         check('session').isNumeric(),
       ],

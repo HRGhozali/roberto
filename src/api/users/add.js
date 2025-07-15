@@ -11,6 +11,9 @@ const {
   Get4Digit,
   GetLevel,
 } = require('../../utils/utils');
+// const {
+//   authToken,
+// } = require('../../utils/middleware');
 
 module.exports = () => {
   const mRouters = Router();
@@ -66,6 +69,7 @@ module.exports = () => {
     .route('/')
     .post(
       [
+        //authToken(),
         check('firstName').not().isEmpty(),
         check('lastName').not().isEmpty(),
         check('password').not().isEmpty(),
