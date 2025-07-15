@@ -82,6 +82,7 @@ module.exports = () => {
             }
             else {
               const token = genToken(data.dataValues.id, data.dataValues.email, data.dataValues.role);
+              console.log('token',token);
               let infoDat = {
                 id: data.dataValues.id,
                 session: data.dataValues.nSession,
