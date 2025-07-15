@@ -5,6 +5,9 @@ const {
   IsValidEmail,
   GetReqValues,
 } = require('../../utils/utils');
+const {
+  genToken,
+} = require('../../utils/middleware');
 
 module.exports = () => {
   const mRouters = Router();
@@ -78,6 +81,7 @@ module.exports = () => {
               };
             }
             else {
+              const token = genToken(data.dataValues.id, data.dataValues.email, data.dataValues.role);
               let infoDat = {
                 id: data.dataValues.id,
                 session: data.dataValues.nSession,
