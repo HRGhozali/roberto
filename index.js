@@ -163,6 +163,17 @@ async function startServer() {
     usersGetUser
   );
 
+  // Protected Route JWT
+  // folder: users
+  const login = require('./src/api/users/login')();
+  app.use(
+    '/api/users/login',
+    cors(),
+    bodyParser.json(),
+    bodyParser.urlencoded({ extended: false }),
+    login
+  );
+
   //
   // end  website
   //*********************** */
