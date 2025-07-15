@@ -21,6 +21,8 @@ const swaggerUi = require('swagger-ui-express');
 const basicAuth = require('express-basic-auth');
 
 const models = require('./src/models')(false);
+const { authToken } = require('./src/utils/middleware');
+
 
 //
 global.Models = models;
@@ -66,6 +68,15 @@ async function startServer() {
           url: 'http://www.apache.org/licenses/LICENSE-2.0.html',
         },
       },
+      // Add security definitions here if required (e.g., apiKey, bearerToken, etc.)
+      securityDefinitions: {
+        // using Bearer token authentication
+        bearerAuth: {
+          type: 'apiKey',
+          name: 'Authorization',
+          in: 'header',
+        },
+      },
     },
     apis: ['./src/api/**/*.js'],
   };
@@ -83,6 +94,7 @@ async function startServer() {
     cors(),
     bodyParser.json(),
     bodyParser.urlencoded({ extended: false }),
+    authToken,
     usersAdd
   );
 
