@@ -93,9 +93,10 @@ module.exports = () => {
               try {
                 let infoDat = {
                   id: data.dataValues.id,
-                  fullName:
-                    data.dataValues.firstName + ' ' + data.dataValues.lastName,
+                  fullName:     data.dataValues.firstName + ' ' + data.dataValues.lastName,
                   email: data.dataValues.email,
+                  createdby: 'user @ mm/dd/yyyy hh:mmPM/AM',                  
+                  updateby: 'blacnk if not updated @ mm/dd/yyyy hh:mmPM/AM'
                 };
 
                 json = {

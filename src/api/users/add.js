@@ -66,7 +66,7 @@ module.exports = () => {
    *       401:
    *         description: Token invalid or expired.
    */
-  
+
   mRouters
     .route('/')
     .post(
@@ -88,6 +88,7 @@ module.exports = () => {
             .json(
               gg.returnDat(true, 400, 'API required values.', errors.array())
             );
+        console.log('user:', req.user);
         const mDat = GetReqValues(req);
         let { firstName, lastName, password, mobile, email, accessLevel } = mDat;
         if (IsNulo(mobile)) mobile = '';
@@ -103,7 +104,7 @@ module.exports = () => {
           if (!(IsValidPhone('abc281-9603930')))
             return res.status(200).json(gg.returnDat(true, 400, 'Invalid mobile number.', null));
           nphone = FormatPhone(mobile);
-        }        
+        }
         if (accessLevel < 1 || accessLevel > 5)
           return res
             .status(200)

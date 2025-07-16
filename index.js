@@ -29,7 +29,7 @@ global.Models = models;
 
 // Array of valid users (username:password)
 const validUsers = {
-  rey: 'Abc123456',
+  rey: '1234',
   user2: '654321',
 };
 // Middleware for basic authentication
@@ -81,7 +81,9 @@ async function startServer() {
     apis: ['./src/api/**/*.js'],
   };
   const swaggerDocs = swaggerJSDoc(swaggerOptions);
+  // app.use('/swagger', authMiddleware, swaggerUi.serve, swaggerUi.setup(swaggerDocs));
   app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+  
 
   //
   // swagger api  **********************************************************
@@ -97,6 +99,7 @@ async function startServer() {
     authToken,
     usersAdd
   );
+ 
 
   // Protected Route JWT
   // folder: users
