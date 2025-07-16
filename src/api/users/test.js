@@ -18,6 +18,8 @@ module.exports = () => {
    *   post:
    *     summary: Protected Route JWT
    *     description: Token test.
+   *     security:
+   *       - bearerAuth: []
    *     parameters:
    *       - name: token
    *         description: Token.

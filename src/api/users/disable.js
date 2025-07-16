@@ -17,6 +17,8 @@ module.exports = () => {
    *   post:
    *     summary: Protected Route JWT
    *     description: Disable account. Checks if account exists via id. Restricted to admin/manager.
+   *     security:
+   *       - bearerAuth: []
    *     parameters:
    *       - name: id
    *         description: id assigned.

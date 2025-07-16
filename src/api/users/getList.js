@@ -12,6 +12,8 @@ module.exports = () => {
    *   post:
    *     summary: Protected Route JWT
    *     description: Get list of all user IDs and emails.
+   *     security:
+   *       - bearerAuth: []
    *
    *     responses:
    *       200:

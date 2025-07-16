@@ -18,6 +18,8 @@ module.exports = () => {
    *   post:
    *     summary: Protected Route JWT
    *     description: Edit user email. Checks if account exists via id. Edits email using given values. Restricted to admin/manager.
+   *     security:
+   *       - bearerAuth: []
    *     parameters:
    *       - name: id
    *         description: id assigned.

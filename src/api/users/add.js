@@ -24,6 +24,8 @@ module.exports = () => {
    *   post:
    *     summary: Protected Route JWT
    *     description: Create new user account. Restricted to admin/manager.
+   *     security:
+   *       - bearerAuth: []
    *     parameters:
    *       - name: firstName
    *         description: First name. Max 50 chars.
