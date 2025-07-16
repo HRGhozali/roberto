@@ -91,12 +91,16 @@ module.exports = () => {
               };
             } else {
               try {
+                let updated = data.dataValues.idUserUpdate + ' ' + data.dataValues.updateDate;
+                if (data.dataValues.idUserUpdate == 0) {
+                  updated = '';
+                }
                 let infoDat = {
                   id: data.dataValues.id,
                   fullName:     data.dataValues.firstName + ' ' + data.dataValues.lastName,
                   email: data.dataValues.email,
-                  createdby: 'user @ mm/dd/yyyy hh:mmPM/AM',                  
-                  updateby: 'blacnk if not updated @ mm/dd/yyyy hh:mmPM/AM'
+                  createdby: data.dataValues.idUserCreate + ' ' + data.dataValues.createDate,  // 'user @ mm/dd/yyyy hh:mmPM/AM'                  
+                  updateby: updated,  // 'blacnk if not updated @ mm/dd/yyyy hh:mmPM/AM'
                 };
 
                 json = {

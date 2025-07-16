@@ -109,6 +109,16 @@ module.exports = () => {
           return res
             .status(200)
             .json(gg.returnDat(true, 400, 'accessLevel is invalid, valid are 1,2,3,4,5.', null));
+        if (req.user['role'] > 2) {
+          return res
+            .status(200)
+            .json(gg.returnDat(true, 400, 'Your role cannot add users.', null));
+        }
+        if (req.user['role'] > accessLevel) {
+          return res
+            .status(200)
+            .json(gg.returnDat(true, 400, 'You cannot add a user of a higher access level than yours.', null));
+        }
 
         const dat = await global.Models.users
           .findOne({
@@ -152,7 +162,7 @@ module.exports = () => {
         const dat2 = await global.Models.users
           .create({
             apiVersion: global.apiVersion,
-            idUserCreate: 0,
+            idUserCreate: req.user.id,
             accessLevel: accessLevel,
             accessName: GetLevel(accessLevel),
             firstName: firstName,

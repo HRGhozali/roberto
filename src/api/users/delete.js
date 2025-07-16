@@ -56,8 +56,14 @@ module.exports = () => {
             .json(
               gg.returnDat(true, 400, 'API required values.', errors.array())
             );
+        console.log('user:', req.user);
         const mDat = GetReqValues(req);
         let { id, session } = mDat;
+        if (req.user['role'] != 1) {  // Says this is undefined? But when I use it for add it works fine.
+          return res
+            .status(200)
+            .json(gg.returnDat(true, 400, 'Your role cannot delete users!', null));
+        }
 
         //rey will do
         //let confirmation = Get4Digit();

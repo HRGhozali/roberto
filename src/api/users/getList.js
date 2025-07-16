@@ -31,6 +31,12 @@ module.exports = () => {
         //authToken(),
       ],
       async (req, res) => {
+        let gg = require('../../utils/myglobal');
+        if (req.user['role'] > 3 || req.user['role'] < 1) {
+          return res
+            .status(200)
+            .json(gg.returnDat(true, 400, 'Your role cannot get a list of users.', null));
+        }
         const dat = await global.Models.users
           .findAll({ attributes: ['id','email'], where: { active: 1 } })  // Assuming we only wanna be able to search active users.
           .then(async function (data) {

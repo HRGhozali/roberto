@@ -116,6 +116,16 @@ module.exports = () => {
                 null
               )
             );
+        if (req.user['role'] > 2 || req.user['role'] < 1) {
+          return res
+            .status(200)
+            .json(gg.returnDat(true, 400, 'Your role cannot edit users!', null));
+        }
+        if (req.user['role'] > accessLevel) {
+          return res
+            .status(200)
+            .json(gg.returnDat(true, 400, 'You cannot give users a higher role than you do.', null));
+        }
 
         const dat = await global.Models.users
           .findOne({ where: { id: id, nSession: session } })
@@ -137,11 +147,19 @@ module.exports = () => {
                   'You cannot edit an inactive user.',
                 data: null,
               };
+            } else if (data.dataValues.accessLevel < req.user['role']) {
+              json = {
+                error: true,
+                code: 400,
+                message:
+                  'You cannot edit users of a higher role.',
+                data: null,
+              };
             } else {
               const randomValue =
                 Math.floor(Math.random() * 100) + data.dataValues.nSession;
               const updatedValues = {
-                idUserUpdate: 0,
+                idUserUpdate: req.user.id,
                 updateDate: Sequelize.Sequelize.fn('getutcdate'),
                 firstName: firstName,
                 lastName: lastName,

@@ -71,6 +71,11 @@ module.exports = () => {
           return res
             .status(200)
             .json(gg.returnDat(true, 400, 'Invalid email.', null));
+        if (req.user['role'] > 2 || req.user['role'] < 1) {
+          return res
+            .status(200)
+            .json(gg.returnDat(true, 400, 'Your role cannot edit users!', null));
+        }
         
         const dat = await global.Models.users
           .findOne({
@@ -124,6 +129,14 @@ module.exports = () => {
                 code: 400,
                 message:
                   'You cannot edit an inactive account.',
+                data: null,
+              };
+            } else if (req.user['role'] > data.dataValues.accessLevel) {
+              json = {
+                error: true,
+                code: 400,
+                message:
+                  'You cannot edit users of a higher role than you.',
                 data: null,
               };
             } else {

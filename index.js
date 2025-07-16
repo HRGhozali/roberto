@@ -109,6 +109,7 @@ async function startServer() {
     cors(),
     bodyParser.json(),
     bodyParser.urlencoded({ extended: false }),
+    authToken,
     usersEdit
   );
 
@@ -120,6 +121,7 @@ async function startServer() {
     cors(),
     bodyParser.json(),
     bodyParser.urlencoded({ extended: false }),
+    authToken,
     usersDelete
   );
 
@@ -131,6 +133,7 @@ async function startServer() {
     cors(),
     bodyParser.json(),
     bodyParser.urlencoded({ extended: false }),
+    authToken,
     usersEditEmail
   );
 
@@ -142,6 +145,7 @@ async function startServer() {
     cors(),
     bodyParser.json(),
     bodyParser.urlencoded({ extended: false }),
+    authToken,
     usersDisable
   );
 
@@ -153,6 +157,7 @@ async function startServer() {
     cors(),
     bodyParser.json(),
     bodyParser.urlencoded({ extended: false }),
+    authToken,
     usersEnable
   );
 
@@ -164,6 +169,7 @@ async function startServer() {
     cors(),
     bodyParser.json(),
     bodyParser.urlencoded({ extended: false }),
+    authToken,
     usersGetList
   );
 
@@ -175,6 +181,7 @@ async function startServer() {
     cors(),
     bodyParser.json(),
     bodyParser.urlencoded({ extended: false }),
+    authToken,
     usersGetUser
   );
 
@@ -197,6 +204,7 @@ async function startServer() {
     cors(),
     bodyParser.json(),
     bodyParser.urlencoded({ extended: false }),
+    authToken,
     test
   );
 

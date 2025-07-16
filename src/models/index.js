@@ -72,9 +72,11 @@ async function syncTables(xforce) {
     .sync({ force: xforce })
     .then(() => {
       console.log('*sync tables');
+      // Uncomment the below line if remaking the database from scratch
+      // db['users'].create({ idUserCreate: 1, idUserUpdate: 0, name: 'Rey Ghozali', firstName:'Rey', lastName: 'Ghozali', email: 'rey@gmail.com', password: '123456', accessLevel: 1, accessName: 'Admin', mobile: '(123) 123-1234' });
       // if (xforce) {      
       //   console.log('*seed tables');
-      // db['users'].create({ idUserCreate: 1, idUserUpdate: 0, name: 'Rey Gonzxali', firstName:'Rey', lastName: 'Gonzali', email: 'rey@gmail.com', password: '123456', accessLevel: 1, accessName: 'Admin', mobile: '(123) 123-1234' });      
+      //   db['users'].create({ idUserCreate: 1, idUserUpdate: 0, name: 'Rey Ghozali', firstName:'Rey', lastName: 'Ghozali', email: 'rey@gmail.com', password: '123456', accessLevel: 1, accessName: 'Admin', mobile: '(123) 123-1234' });      
       // }
     })
     .catch((error) => {
