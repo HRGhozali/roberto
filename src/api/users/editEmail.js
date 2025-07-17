@@ -56,6 +56,11 @@ module.exports = () => {
         check('email').isEmail(),
       ],
       async (req, res) => {
+        if (req.user['role'] > 2 || req.user['role'] < 1) {
+          return res
+            .status(200)
+            .json(gg.returnDat(true, 400, 'Your role cannot edit users!', null));
+        }
         const errors = validationResult(req);
         let gg = require('../../utils/myglobal');
         if (!errors.isEmpty())
@@ -71,11 +76,7 @@ module.exports = () => {
           return res
             .status(200)
             .json(gg.returnDat(true, 400, 'Invalid email.', null));
-        if (req.user['role'] > 2 || req.user['role'] < 1) {
-          return res
-            .status(200)
-            .json(gg.returnDat(true, 400, 'Your role cannot edit users!', null));
-        }
+        
         
         const dat = await global.Models.users
           .findOne({

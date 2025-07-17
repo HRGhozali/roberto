@@ -48,7 +48,7 @@ module.exports = () => {
                 message: 'Invalid data/session.',
                 data: null,
               };
-            } else if (length(data) === 0) {
+            } else if (data.size === 0) {
               json = {
                 error: false,
                 code: 200,

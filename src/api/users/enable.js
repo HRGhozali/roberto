@@ -49,6 +49,11 @@ module.exports = () => {
         check('session').isNumeric(),
       ],
       async (req, res) => {
+        if (req.user['role'] > 2 || req.user['role'] < 1) {
+          return res
+            .status(200)
+            .json(gg.returnDat(true, 400, 'Your role cannot edit users!', null));
+        }
         const errors = validationResult(req);
         let gg = require('../../utils/myglobal');
         if (!errors.isEmpty())
@@ -59,11 +64,7 @@ module.exports = () => {
             );
         const mDat = GetReqValues(req);
         let { id, session } = mDat;
-        if (req.user['role'] > 2 || req.user['role'] < 1) {
-          return res
-            .status(200)
-            .json(gg.returnDat(true, 400, 'Your role cannot edit users!', null));
-        }
+        
         
         const dat = await global.Models.users
           .findOne({ where: { id: id, nSession: session } })

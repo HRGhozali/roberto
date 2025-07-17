@@ -84,6 +84,11 @@ module.exports = () => {
         check('accessLevel').isNumeric(),
       ],
       async (req, res) => {
+        if (req.user['role'] > 2 || req.user['role'] < 1) {
+          return res
+            .status(200)
+            .json(gg.returnDat(true, 400, 'Your role cannot edit users!', null));
+        }
         const errors = validationResult(req);
         let gg = require('../../utils/myglobal');
         if (!errors.isEmpty())
@@ -116,11 +121,6 @@ module.exports = () => {
                 null
               )
             );
-        if (req.user['role'] > 2 || req.user['role'] < 1) {
-          return res
-            .status(200)
-            .json(gg.returnDat(true, 400, 'Your role cannot edit users!', null));
-        }
         if (req.user['role'] > accessLevel) {
           return res
             .status(200)

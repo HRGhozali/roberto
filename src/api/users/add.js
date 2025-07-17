@@ -80,6 +80,11 @@ module.exports = () => {
         check('accessLevel').isNumeric(),
       ],
       async (req, res) => {
+        if (req.user['role'] > 2) {
+          return res
+            .status(200)
+            .json(gg.returnDat(true, 400, 'Your role cannot add users.', null));
+        }
         const errors = validationResult(req);
         let gg = require('../../utils/myglobal');
         if (!errors.isEmpty())
@@ -109,11 +114,6 @@ module.exports = () => {
           return res
             .status(200)
             .json(gg.returnDat(true, 400, 'accessLevel is invalid, valid are 1,2,3,4,5.', null));
-        if (req.user['role'] > 2) {
-          return res
-            .status(200)
-            .json(gg.returnDat(true, 400, 'Your role cannot add users.', null));
-        }
         if (req.user['role'] > accessLevel) {
           return res
             .status(200)
@@ -177,6 +177,7 @@ module.exports = () => {
             let infoDat = {
               id: data.dataValues.id,
               session: data.dataValues.nSession,
+              createdBy: data.dataValues.idUserCreate,
               fullName: data.dataValues.firstName + ' ' + data.dataValues.lastName,
               firstName: data.dataValues.firstName,
               lastName: data.dataValues.lastName,
