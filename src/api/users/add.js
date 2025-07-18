@@ -106,7 +106,7 @@ module.exports = () => {
         let nphone = '';
         //rey will do
         if (mobile != '') {
-          if (!(IsValidPhone('abc281-9603930')))
+          if (!(IsValidPhone(mobile)))
             return res.status(200).json(gg.returnDat(true, 400, 'Invalid mobile number.', null));
           nphone = FormatPhone(mobile);
         }

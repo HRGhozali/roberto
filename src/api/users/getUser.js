@@ -80,13 +80,11 @@ module.exports = () => {
                 message: 'Invalid data/session.',
                 data: null,
               };
-            } else if (data.dataValues.active == 0) {
-              //this is your token and to prevent by accident updating yoursekf with a lower level
+            } else if (data.dataValues.accessLevel < req.user['role']) {
               json = {
                 error: true,
                 code: 400,
-                message:
-                  'You cannot search an inactive user.',
+                message: 'You cannot retrieve the data of users of a higher role than yours.',
                 data: null,
               };
             } else {
@@ -95,6 +93,7 @@ module.exports = () => {
                   id: data.dataValues.id,
                   fullName: data.dataValues.firstName + ' ' + data.dataValues.lastName,
                   email: data.dataValues.email,
+                  session: data.dataValues.nSession,
                   createdby: data.dataValues.idUserCreate + ' ' + data.dataValues.createDate,  // 'user @ mm/dd/yyyy hh:mmPM/AM'                  
                   updatedby: (data.dataValues.idUserUpdate == '0') ? (data.dataValues.idUserUpdate + ' ' + data.dataValues.updateDate) : '',  // 'blacnk if not updated @ mm/dd/yyyy hh:mmPM/AM'
                 };
