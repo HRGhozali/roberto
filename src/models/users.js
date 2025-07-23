@@ -28,7 +28,7 @@ module.exports = (sequelize) => {
       defaultValue: Sequelize.Sequelize.fn('getutcdate')
     },
     idUserCreate: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     updateDate: {
@@ -37,7 +37,7 @@ module.exports = (sequelize) => {
       defaultValue: Sequelize.Sequelize.fn('getutcdate')
     },
     idUserUpdate: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0
     },

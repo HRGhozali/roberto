@@ -114,7 +114,7 @@ module.exports = () => {
           return res
             .status(200)
             .json(gg.returnDat(true, 400, 'accessLevel is invalid, valid are 1,2,3,4,5.', null));
-        if (req.user['role'] > accessLevel) {
+        if (accessLevel < req.user['role']) {
           return res
             .status(200)
             .json(gg.returnDat(true, 400, 'You cannot add a user of a higher access level than yours.', null));

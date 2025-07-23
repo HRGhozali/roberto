@@ -86,7 +86,7 @@ module.exports = () => {
                   'You cannot deactivate an inactive account.',
                 data: null,
               };
-            } else if (req.user['role'] > data.dataValues.accessLevel) {
+            } else if (data.dataValues.accessLevel < req.user['role']) {
               json = {
                 error: true,
                 code: 400,

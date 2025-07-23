@@ -16,7 +16,7 @@ module.exports = () => {
    * /api/users/getUser:
    *   post:
    *     summary: Protected Route JWT
-   *     description: Get user's full name using email and ID.
+   *     description: Get user's full name and session using email and ID.
    *     security:
    *       - bearerAuth: []
    *     parameters:

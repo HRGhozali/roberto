@@ -90,7 +90,7 @@ module.exports = () => {
                 };
               }
               else {
-                const token = genToken(data.dataValues.id, data.dataValues.email, data.dataValues.accessLevel);
+                const token = genToken(data.dataValues.idNumber, data.dataValues.email, data.dataValues.accessLevel);
                 console.log('token',token);
                 let infoDat = {
                   token: token,

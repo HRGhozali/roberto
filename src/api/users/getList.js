@@ -158,11 +158,11 @@ module.exports = () => {
         mSS += ' Select top 100 a.id,a.firstName,a.lastName,a.email,a.accessName,a.active ';
         mSS += '  From users as a with(nolock) ';        
         mSS += '  Where a.active=@active ';
-        if (search != '' && splitSearch.length <= 1) {          
+        if (search != '' && splitSearch.length <= 1) { // Only 1 search term
           search = '%' + search + '%';
           mSS += '  and ( a.firstName like @search or a.lastName like @search or a.email like @search or a.accessName like @search)';
         }
-        else if (search != '' && splitSearch.length >= 2) {
+        else if (search != '' && splitSearch.length >= 2) {  // Multiple search terms
           mSS += ' and ( ';
           for (let i = 0; i < splitSearch.length; i++) {
             console.log(splitSearch[i]);
