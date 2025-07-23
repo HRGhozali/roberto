@@ -73,6 +73,7 @@ module.exports = () => {
           search = '';
         search = search.replace(/'/g, '');
 
+        let splitSearch = search.split(' ');
 
         // const dat = await global.Models.users  // It returns nothing when Search is empty. Still working on it.
         //   .findAll({
@@ -146,25 +147,40 @@ module.exports = () => {
         //       : 'Invalid request or deceptive request routing.';
         //     return { error: true, code: 400, message: errmsg, data: null };
         //   });
-
-        
+        let replacements = {};
+        replacements['msearch'] = `%${search}%`;
+        replacements['mactive'] = getActive;
         let mSS = '';
         mSS += ' Declare @search varchar(255) ';        
-        mSS += ' Declare @active bit ';        
+        mSS += ' Declare @active bit ';       
         mSS += ' set @search= :msearch ';        
         mSS += ' set @active= :mactive ';
         mSS += ' Select top 100 a.id,a.firstName,a.lastName,a.email,a.accessName,a.active ';
         mSS += '  From users as a with(nolock) ';        
         mSS += '  Where a.active=@active ';
-        if (search != '') {          
+        if (search != '' && splitSearch.length <= 1) {          
           search = '%' + search + '%';
           mSS += '  and ( a.firstName like @search or a.lastName like @search or a.email like @search or a.accessName like @search)';
         }
+        else if (search != '' && splitSearch.length >= 2) {
+          mSS += ' and ( ';
+          for (let i = 0; i < splitSearch.length; i++) {
+            console.log(splitSearch[i]);
+            replacements[`splitSearch${i}`] = `%${splitSearch[i]}%`;
+            mSS += ' ( ';
+            mSS += ` a.firstName like :splitSearch${i} or `;
+            mSS += ` a.lastName like :splitSearch${i} or `;
+            mSS += ` a.email like :splitSearch${i} or `;
+            mSS += ` a.accessName like :splitSearch${i} `;
+            mSS += ' ) ';
+            if (i + 1 < splitSearch.length) {
+              mSS += ' and ';
+            }
+          }
+          mSS += ' ) ';
+        }
         const dat = await global.Models.dbo.query(mSS, {
-          replacements: {
-            msearch: search,
-            mactive: getActive
-          },
+          replacements,
           raw: true,
           type: QueryTypes.SELECT,
           logging: console.log
