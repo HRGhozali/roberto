@@ -17,6 +17,7 @@
   "author": "Roberto Ramirez",
   "license": "ISC",
   "dependencies": {
+    "angular": "^1.8.3",
     "body-parser": "^1.20.2",
     "compression": "^1.8.0",
     "cors": "^2.8.5",
