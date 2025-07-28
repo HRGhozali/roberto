@@ -1,0 +1,21 @@
+<div class="container">
+    <div class="main-page">
+        <div class="addUsers-title">Add New User</div>
+        <form class="addUsers-form" [formGroup]="addUsers_form">
+            <button type="submit" disabled style="display:none;" aria-hidden="true"></button>
+            <label for="fname">First Name:</label>
+            <input type="text" id="fname" class="addUsers-data" formControlName="firstName" placeholder="Input first name:"/>
+            <label for="lname">Last Name:</label>
+            <input type="text" id="lname" class="addUsers-data" formControlName="lastName" placeholder="Input last name:"/>
+            <label for="mobile">Mobile Number:</label>
+            <input type="text" id="mobile" class="addUsers-data" formControlName="mobile" placeholder="Input mobile #:"/>
+            <label for="email">Email:</label>
+            <input type="email" id="email" class="addUsers-data" formControlName="email" placeholder="Input email:"/>
+            <label for="accessLevel">Access Level:</label>
+            <input type="text" id="accessLevel" class="addUsers-data" formControlName="accessLevel" placeholder="Input access level (1-4):"/>
+            <label for="password">Password:</label>
+            <input type="password" id="password" class="addUsers-data" formControlName="password" placeholder="Input password:"/>
+            <button type="submit" [disabled]="isWaitingResponse || !addUsers_form.valid" (click)="addUsers()" class="addUsers-submit">Create User</button>
+        </form>
+    </div>
+</div>
