@@ -1,1 +1,25 @@
-<p>edit-user works!</p>
+<div class="container">
+    <div class="main-page">
+        <div class="editUsers-title">Edit User</div>
+        <form class="editUsers-form" [formGroup]="editUsers_form">
+            <button type="submit" disabled style="display:none;" aria-hidden="true"></button>
+            <label for="id">ID:</label>
+            <input type="text" id="id" class="editUsers-data" formControlName="id" placeholder="Input ID:"/>
+            <label for="session">Session:</label>
+            <input type="text" id="session" class="editUsers-data" formControlName="session" placeholder="Input session:"/>
+            <label for="fname">First Name:</label>
+            <input type="text" id="fname" class="editUsers-data" formControlName="firstName" placeholder="Input first name:"/>
+            <label for="lname">Last Name:</label>
+            <input type="text" id="lname" class="editUsers-data" formControlName="lastName" placeholder="Input last name:"/>
+            <label for="mobile">Mobile Number:</label>
+            <input type="text" id="mobile" class="editUsers-data" formControlName="mobile" placeholder="Input mobile #:"/>
+            <label for="email">Email:</label>
+            <input type="email" id="email" class="editUsers-data" formControlName="email" placeholder="Input email:"/>
+            <label for="accessLevel">Access Level:</label>
+            <input type="text" id="accessLevel" class="editUsers-data" formControlName="accessLevel" placeholder="Input access level (1-4):"/>
+            <label for="password">Password:</label>
+            <input type="password" id="password" class="editUsers-data" formControlName="password" placeholder="Input password:"/>
+            <button type="submit" [disabled]="isWaitingResponse || !editUsers_form.valid" (click)="editUsers()" class="editUsers-submit">Create User</button>
+        </form>
+    </div>
+</div>

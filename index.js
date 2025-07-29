@@ -93,7 +93,10 @@ async function startServer() {
   const usersAdd = require('./src/api/users/add')();
   app.use(
     '/api/users/add',
-    cors(),
+    cors({
+      origin: 'http://localhost:4200',
+      credentials: true
+    }),
     bodyParser.json(),
     bodyParser.urlencoded({ extended: false }),
     authToken,
