@@ -19,7 +19,7 @@ export class Login {
 
   login() {  // finish later
     this.isWaitingResponse = true;
-    /*try {
+    try {
       this.httpService.postDataNoAuth("login", {
         email: this.login_form.value?.email,
         password: this.login_form.value?.password,
@@ -37,6 +37,6 @@ export class Login {
       alert(`Failed to log in: ${error}`);
     } finally {
       this.isWaitingResponse = false;
-    }*/
+    }
   };
 }
