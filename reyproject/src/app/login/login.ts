@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import {FormGroup, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import { HttpService } from '../http-service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,7 @@ export class Login {
     password: new FormControl('',Validators.required),
   });
 
-  constructor(private httpService: HttpService = Inject(HttpService)) {}
+  constructor(private httpService: HttpService = Inject(HttpService), private router: Router) {}
 
   login() {  // finish later
     this.isWaitingResponse = true;
@@ -26,6 +27,8 @@ export class Login {
       }).subscribe((res) => {
           console.log(`Successful login`);
           alert(`Success`);
+          this.router.navigate(['/']).then(() =>
+          window.location.reload());
         }, 
         error => {
           console.error("Error logging in:", error?.message, error?.error?.message);

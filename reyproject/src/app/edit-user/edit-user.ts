@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import {FormGroup, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
+import { HttpService } from '../http-service';
 
 @Component({
   selector: 'app-edit-user',
@@ -15,12 +16,37 @@ export class EditUser {
     firstName: new FormControl('', [Validators.required]),
     lastName: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.required, Validators.email]),
     mobile: new FormControl(''),
     accessLevel: new FormControl('', [Validators.required, Validators.maxLength(1), Validators.min(1), Validators.max(4)]),
   });
 
-  editUsers() {  // Do later
+  constructor(private httpService: HttpService = Inject(HttpService)) {}
 
+  editUsers() {  // Do later
+    this.isWaitingResponse = true;
+    try {
+      this.httpService.postDataNoAuth("users/login", {
+        id: this.editUsers_form.value?.id,
+        session: this.editUsers_form.value?.session,
+        firstName: this.editUsers_form.value?.firstName,
+        lastName: this.editUsers_form.value?.lastName,
+        mobile: this.editUsers_form.value?.mobile,
+        accessLevel: this.editUsers_form.value?.accessLevel,
+        password: this.editUsers_form.value?.password,
+      }).subscribe((res) => {
+          console.log(`Successful edit`);
+          alert(`Success`);
+        }, 
+        error => {
+          console.error("Error editing: ", error?.message, error?.error?.message);
+          alert(`Failed to edit: ${error?.error?.message}`);
+        }
+      );
+    } catch(error) {
+      console.error("Error editing: ", error);
+      alert(`Failed to edit: ${error}`);
+    } finally {
+      this.isWaitingResponse = false;
+    }
   }
 }
