@@ -20,7 +20,7 @@ export class Login {
   login() {  // finish later
     this.isWaitingResponse = true;
     try {
-      this.httpService.postDataNoAuth("login", {
+      this.httpService.postDataNoAuth("users/login", {
         email: this.login_form.value?.email,
         password: this.login_form.value?.password,
       }).subscribe((res) => {

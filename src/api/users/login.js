@@ -47,6 +47,7 @@ module.exports = () => {
         check('password').not().isEmpty(),
       ],
       async (req, res) => {
+        console.log('test');
         const errors = validationResult(req);
         let gg = require('../../utils/myglobal');
         if (!errors.isEmpty())

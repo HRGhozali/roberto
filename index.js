@@ -83,7 +83,12 @@ async function startServer() {
   const swaggerDocs = swaggerJSDoc(swaggerOptions);
   // app.use('/swagger', authMiddleware, swaggerUi.serve, swaggerUi.setup(swaggerDocs));
   app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+  app.use(cors);
   
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:4200');
+    next();
+  });
 
   //
   // swagger api  **********************************************************
@@ -193,7 +198,10 @@ async function startServer() {
   const login = require('./src/api/users/login')();
   app.use(
     '/api/users/login',
-    cors(),
+    cors({
+      origin: 'http://localhost:4200',
+      credentials: true
+    }),
     bodyParser.json(),
     bodyParser.urlencoded({ extended: false }),
     login
