@@ -15,7 +15,7 @@
             <input type="text" id="accessLevel" class="addUsers-data" formControlName="accessLevel" placeholder="Input access level (1-4):"/>
             <label for="password">Password:</label>
             <input type="password" id="password" class="addUsers-data" formControlName="password" placeholder="Input password:"/>
-            <button type="submit" [disabled]="isWaitingResponse || !addUsers_form.valid" (click)="addUsers()" class="addUsers-submit">Create User</button>
+            <button type="submit" [disabled]="isWaitingResponse || !addUsers_form.valid" (click)="addUsers()" class="addUsers-submit">Add User</button>
         </form>
     </div>
 </div>

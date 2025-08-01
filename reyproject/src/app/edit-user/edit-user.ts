@@ -25,7 +25,7 @@ export class EditUser {
   editUsers() {  // Do later
     this.isWaitingResponse = true;
     try {
-      this.httpService.postDataNoAuth("users/login", {
+      this.httpService.postDataNoAuth("users/edit", {
         id: this.editUsers_form.value?.id,
         session: this.editUsers_form.value?.session,
         firstName: this.editUsers_form.value?.firstName,
@@ -34,17 +34,17 @@ export class EditUser {
         accessLevel: this.editUsers_form.value?.accessLevel,
         password: this.editUsers_form.value?.password,
       }).subscribe((res) => {
-          console.log(`Successful edit`);
+          console.log(`Successful user edit`);
           alert(`Success`);
         }, 
         error => {
-          console.error("Error editing: ", error?.message, error?.error?.message);
-          alert(`Failed to edit: ${error?.error?.message}`);
+          console.error("Error editing user: ", error?.message, error?.error?.message);
+          alert(`Failed to edit user: ${error?.error?.message}`);
         }
       );
     } catch(error) {
-      console.error("Error editing: ", error);
-      alert(`Failed to edit: ${error}`);
+      console.error("Error editing user: ", error);
+      alert(`Failed to edit user: ${error}`);
     } finally {
       this.isWaitingResponse = false;
     }

@@ -8,16 +8,16 @@
             <label for="session">Session:</label>
             <input type="text" id="session" class="editUsers-data" formControlName="session" placeholder="Input session:"/>
             <label for="fname">First Name:</label>
-            <input type="text" id="fname" class="editUsers-data" formControlName="firstName" placeholder="Input first name:"/>
+            <input type="text" id="fname" class="editUsers-data" formControlName="firstName" placeholder="Input new first name:"/>
             <label for="lname">Last Name:</label>
-            <input type="text" id="lname" class="editUsers-data" formControlName="lastName" placeholder="Input last name:"/>
+            <input type="text" id="lname" class="editUsers-data" formControlName="lastName" placeholder="Input new last name:"/>
             <label for="mobile">Mobile Number:</label>
-            <input type="text" id="mobile" class="editUsers-data" formControlName="mobile" placeholder="Input mobile #:"/>
+            <input type="text" id="mobile" class="editUsers-data" formControlName="mobile" placeholder="Input new mobile # (optional):"/>
             <label for="accessLevel">Access Level:</label>
-            <input type="text" id="accessLevel" class="editUsers-data" formControlName="accessLevel" placeholder="Input access level (1-4):"/>
+            <input type="text" id="accessLevel" class="editUsers-data" formControlName="accessLevel" placeholder="Input new access level (1-4):"/>
             <label for="password">Password:</label>
             <input type="password" id="password" class="editUsers-data" formControlName="password" placeholder="Input password:"/>
-            <button type="submit" [disabled]="isWaitingResponse || !editUsers_form.valid" (click)="editUsers()" class="editUsers-submit">Create User</button>
+            <button type="submit" [disabled]="isWaitingResponse || !editUsers_form.valid" (click)="editUsers()" class="editUsers-submit">Edit User</button>
         </form>
     </div>
 </div>
