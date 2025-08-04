@@ -27,7 +27,13 @@
     </div>
     <div class="results">
         <div class="search-title">Search Results</div>
-        <div class="result-data"></div>
+        <div class="result-data">
+            <app-search-data
+            *ngFor="let searchData of searchList"
+            [searchData]="searchData"
+            >
+            </app-search-data>
+        </div>
         <!-- TODO: Figure out a way to populate w/ result data -->
     </div>
 </div>

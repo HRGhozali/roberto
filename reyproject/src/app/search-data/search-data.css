@@ -1,0 +1,27 @@
+.searchData {
+    background-color:lightskyblue;
+    padding-left:5px;
+    padding-right:5px;
+    padding-top:1px;
+    padding-bottom:1px;
+    margin-top:5px;
+    margin-bottom:10px;
+    margin-left:5px;
+    margin-right:5px;
+    border-radius:10px;
+    justify-content:center;
+    border: 3px solid lightblue;
+    box-shadow: 0 0 3px darkslateblue;
+    font-size:0.8em;
+    text-align:center;
+}
+
+.searchData h3 {
+    margin-bottom:5px;
+    text-decoration:underline;
+    color:black;
+}
+
+.searchData p {
+    margin-top:5px;
+}

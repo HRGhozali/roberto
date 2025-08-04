@@ -1,0 +1,14 @@
+<section class="searchData">
+    <h3 class="searchData-heading">{{searchData().fullName}}</h3>
+    <p class="searchData-id">ID: {{searchData().id}}</p>
+    <p class="searchData-email">ID: {{searchData().email}}</p>
+    @if (searchData().isList) {
+        <p class="searchData-accessName">ID: {{searchData().accessName}}</p>
+        <p class="searchData-active">ID: {{searchData().active}}</p>
+    }
+    @else {
+        <p class="searchData-session">ID: {{searchData().session}}</p>
+        <p class="searchData-createdBy">ID: {{searchData().createdBy}}</p>
+        <p class="searchData-updatedBy">ID: {{searchData().updatedBy}}</p>
+    }
+</section>
