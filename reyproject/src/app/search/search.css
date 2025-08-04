@@ -88,3 +88,20 @@
 label {
     font-weight:bold;
 }
+
+.result-data {
+    display: block;
+    flex-basis: 50%;
+    width: 75vw;
+    margin-left: 2.5vw;
+    margin-right: 2.5vw;
+    height: fit-content;
+    min-height: 20vh;
+    min-width: 500px;
+    margin-top: -22vh;
+    background-color: paleturquoise;
+    border-radius: 20px;
+    justify-content:center;
+    border: 2px solid lightskyblue;
+    box-shadow: 0 0 5px darkslateblue;
+}
