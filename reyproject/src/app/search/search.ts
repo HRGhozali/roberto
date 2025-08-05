@@ -2,10 +2,11 @@ import { Component, Inject } from '@angular/core';
 import {FormGroup, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import { HttpService } from '../http-service';
 import {SearchResults} from '../search-results';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-search',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './search.html',
   styleUrl: './search.css'
 })
