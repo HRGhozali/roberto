@@ -15,6 +15,7 @@ const http = require('http');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const compression = require('compression');
+const cookieParser = require('cookie-parser');
 
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
@@ -83,12 +84,16 @@ async function startServer() {
   const swaggerDocs = swaggerJSDoc(swaggerOptions);
   // app.use('/swagger', authMiddleware, swaggerUi.serve, swaggerUi.setup(swaggerDocs));
   app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-  app.use(cors);
+  app.use(cors({
+    origin: 'http://localhost:4200',
+    credentials: true
+  }));
+  app.use(cookieParser());
   
-  app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:4200');
-    next();
-  });
+  // app.use((req, res, next) => {
+  //   res.header('Access-Control-Allow-Origin', 'http://localhost:4200');
+  //   next();
+  // });
 
   //
   // swagger api  **********************************************************
@@ -114,7 +119,10 @@ async function startServer() {
   const usersEdit = require('./src/api/users/edit')();
   app.use(
     '/api/users/edit',
-    cors(),
+    cors({
+      origin: 'http://localhost:4200',
+      credentials: true
+    }),
     bodyParser.json(),
     bodyParser.urlencoded({ extended: false }),
     authToken,
@@ -126,7 +134,10 @@ async function startServer() {
   const usersDelete = require('./src/api/users/delete')();
   app.use(
     '/api/users/delete',
-    cors(),
+    cors({
+      origin: 'http://localhost:4200',
+      credentials: true
+    }),
     bodyParser.json(),
     bodyParser.urlencoded({ extended: false }),
     authToken,
@@ -138,7 +149,10 @@ async function startServer() {
   const usersEditEmail = require('./src/api/users/editEmail')();
   app.use(
     '/api/users/editEmail',
-    cors(),
+    cors({
+      origin: 'http://localhost:4200',
+      credentials: true
+    }),
     bodyParser.json(),
     bodyParser.urlencoded({ extended: false }),
     authToken,
@@ -150,7 +164,10 @@ async function startServer() {
   const usersDisable = require('./src/api/users/disable')();
   app.use(
     '/api/users/disable',
-    cors(),
+    cors({
+      origin: 'http://localhost:4200',
+      credentials: true
+    }),
     bodyParser.json(),
     bodyParser.urlencoded({ extended: false }),
     authToken,
@@ -162,7 +179,10 @@ async function startServer() {
   const usersEnable = require('./src/api/users/enable')();
   app.use(
     '/api/users/enable',
-    cors(),
+    cors({
+      origin: 'http://localhost:4200',
+      credentials: true
+    }),
     bodyParser.json(),
     bodyParser.urlencoded({ extended: false }),
     authToken,
@@ -174,7 +194,10 @@ async function startServer() {
   const usersGetList = require('./src/api/users/getList')();
   app.use(
     '/api/users/getList',
-    cors(),
+    cors({
+      origin: 'http://localhost:4200',
+      credentials: true
+    }),
     bodyParser.json(),
     bodyParser.urlencoded({ extended: false }),
     authToken,
@@ -186,7 +209,10 @@ async function startServer() {
   const usersGetUser = require('./src/api/users/getUser')();
   app.use(
     '/api/users/getUser',
-    cors(),
+    cors({
+      origin: 'http://localhost:4200',
+      credentials: true
+    }),
     bodyParser.json(),
     bodyParser.urlencoded({ extended: false }),
     authToken,
@@ -212,7 +238,10 @@ async function startServer() {
   const test = require('./src/api/users/test')();
   app.use(
     '/api/users/test',
-    cors(),
+    cors({
+      origin: 'http://localhost:4200',
+      credentials: true
+    }),
     bodyParser.json(),
     bodyParser.urlencoded({ extended: false }),
     authToken,

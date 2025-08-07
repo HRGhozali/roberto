@@ -106,6 +106,14 @@ module.exports = () => {
                   email: data.dataValues.email,
                   active: data.dataValues.active,
                 };
+                console.log('meeeeem');
+                res.cookie('token', token, {
+                  httpOnly: true,
+                  secure: process.env.NODE_ENV === 'production',
+                  sameSite: 'lax',
+                  maxAge: 24 * 60 * 60 * 1000,
+                });
+                console.log('123456');
                 json = {
                   error: false,
                   code: 200,

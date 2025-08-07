@@ -17,7 +17,16 @@ function genToken(id, email, role) {
 
 function authToken(req, res, next) {
   // console.log('test', req);
-  const token = req.headers.authorization;  // Numerous undefined issues that I can't get fixed
+  let token;
+
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+    token = req.headers.authorization.split(' ')[1];
+  }
+
+  if (!token && req.cookies && req.cookies.token) {
+    token = req.cookies.token;
+  }
+
   // console.log('token', token);
   if ((token == null) || (!token)) {
     res.status(200).json({ error: true, code: 401, message: 'Bearer token not found.', data: null });

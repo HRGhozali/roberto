@@ -143,6 +143,7 @@ module.exports = () => {
                 data: null,
               }; //or mobile
             }
+            console.log('Creation successful!');
             return json;
           })
           .catch((error) => {
