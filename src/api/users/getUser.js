@@ -94,6 +94,8 @@ module.exports = () => {
                   fullName: data.dataValues.firstName + ' ' + data.dataValues.lastName,
                   email: data.dataValues.email,
                   session: data.dataValues.nSession,
+                  mobile: data.dataValues.mobile,
+                  accessLevel: data.dataValues.accessLevel,
                   createdby: 'User ' + data.dataValues.idUserCreate + ' on ' + data.dataValues.createDate,  // 'user @ mm/dd/yyyy hh:mmPM/AM'                  
                   updatedby: (data.dataValues.idUserUpdate == 0) ? ('User ' +  data.dataValues.idUserUpdate + ' on ' + data.dataValues.updateDate) : '',  // 'blank if not updated @ mm/dd/yyyy hh:mmPM/AM'
                 };
