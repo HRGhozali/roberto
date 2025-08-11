@@ -149,15 +149,18 @@ module.exports = () => {
         //   });
         let replacements = {};
         replacements['msearch'] = `%${search}%`;
-        replacements['mactive'] = getActive;
         let mSS = '';
         mSS += ' Declare @search varchar(255) ';        
         mSS += ' Declare @active bit ';       
-        mSS += ' set @search= :msearch ';        
-        mSS += ' set @active= :mactive ';
+        mSS += ' set @search= :msearch ';
         mSS += ' Select top 100 a.id,a.firstName,a.lastName,a.email,a.accessName,a.active ';
         mSS += '  From users as a with(nolock) ';        
-        mSS += '  Where a.active=@active ';
+        if (getActive != true) {
+          mSS += '  Where a.active=1 ';
+        }
+        else {
+          mSS += '  Where (a.active=1 or a.active=0) ';
+        }
         if (search != '' && splitSearch.length <= 1) { // Only 1 search term
           search = '%' + search + '%';
           mSS += '  and ( a.firstName like @search or a.lastName like @search or a.email like @search or a.accessName like @search)';

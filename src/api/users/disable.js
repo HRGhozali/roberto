@@ -49,7 +49,7 @@ module.exports = () => {
         check('session').isNumeric(),
       ],
       async (req, res) => {
-        if (req.users.role > 2) {
+        if (req.user['role'] > 2) {
           return res
             .status(200)
             .json(gg.returnDat(true, 400, 'Your role cannot disable users.', null));
