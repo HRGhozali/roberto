@@ -146,6 +146,23 @@ function FormatDateTime(mdate) {
   }
 }
 
+function FormatDateAlt(mdate) {
+  try {
+    if (mdate.length() >= 10) {
+      const month = String(mdate.substring(0,2)).padStart(2, '0');
+      const day = String(mdate.substring(2,4)).padStart(2, '0');
+      const year = String(mdate.substring(4,8));
+      const formattedDate = `${month}/${day}/${year}`;
+      return formattedDate;
+    }
+    else {
+      return mdate;
+    }
+  } catch (e) {
+    return '01/01/1980';
+  }
+}
+
 function SqlDate(mdate) {
   try {
     const month = String(mdate.getMonth() + 1).padStart(2, '0');
@@ -313,4 +330,5 @@ module.exports = {
   FormatPhone,
   Get4Digit,
   GetLevel,
+  FormatDateAlt,
 };

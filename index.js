@@ -248,6 +248,21 @@ async function startServer() {
     test
   );
 
+  // Protected Route JWT
+  // folder: projects
+  const projectsAdd = require('./src/api/projects/add')();
+  app.use(
+    '/api/projects/add',
+    cors({
+      origin: 'http://localhost:4200',
+      credentials: true
+    }),
+    bodyParser.json(),
+    bodyParser.urlencoded({ extended: false }),
+    authToken,
+    projectsAdd
+  );
+
   //
   // end  website
   //*********************** */
